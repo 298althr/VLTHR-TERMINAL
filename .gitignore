@@ -1,9 +1,9 @@
-# Ignore everything
-*
+# Ignore everything in the root
+/*
 
 # Except these folders
-!VLTHR/
-!Backend/
+!/VLTHR/
+!/Backend/
 
 # Except this file
 !/.gitignore
