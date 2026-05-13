@@ -1,34 +1,42 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import { AppShell } from './AppShell';
-import { Settings, User, Bell, Shield, Smartphone, HelpCircle, ChevronRight } from 'lucide-react';
+import { Settings, User, Bell, Shield, Terminal, HelpCircle, ChevronRight, Activity, Database } from 'lucide-react';
+import { fetchFromBackend } from '@/lib/api';
 
 export function SettingsPage() {
+  const [stats, setStats] = useState<Record<string, { count: number }>>({});
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getStats = async () => {
+      const data = await fetchFromBackend('/api/stats');
+      if (data) setStats(data);
+      setLoading(false);
+    };
+    getStats();
+  }, []);
+
   const sections = [
     {
-      title: 'Identity',
+      title: 'Infrastructure',
       items: [
-        { icon: <User size={18} />, label: 'Neural Profile', value: 'Active' },
-        { icon: <Shield size={18} />, label: 'Privacy & Keys', value: '' },
+        { icon: <Database size={18} />, label: 'API Keys', value: 'Backend/Vault' },
+        { icon: <Terminal size={18} />, label: 'Data Adapters', value: 'Remote' },
       ]
     },
     {
-      title: 'System',
+      title: 'Terminal System',
       items: [
-        { icon: <Bell size={18} />, label: 'Notifications', value: 'Interactive' },
-        { icon: <Smartphone size={18} />, label: 'OS Version', value: 'v26.1.4' },
-      ]
-    },
-    {
-      title: 'Support',
-      items: [
-        { icon: <HelpCircle size={18} />, label: 'Documentation', value: '' },
+        { icon: <Bell size={18} />, label: 'Price Alerts', value: 'Disabled' },
+        { icon: <Shield size={18} />, label: 'Neural Security', value: 'Active' },
       ]
     }
   ];
 
   return (
-    <AppShell title="System Settings">
+    <AppShell title="Terminal Settings">
       <div className="flex flex-col gap-8">
         {/* User Profile Summary */}
         <div className="glass-liquid p-6 rounded-[28px] flex items-center gap-4">
@@ -36,10 +44,51 @@ export function SettingsPage() {
             <User size={32} />
           </div>
           <div className="flex flex-col">
-            <h2 className="text-white font-bold">Admin Node</h2>
-            <span className="text-white/40 text-xs">admin@orthom8.io</span>
+            <h2 className="text-white font-bold">Terminal Operator</h2>
+            <span className="text-white/40 text-xs">node@althr.terminal</span>
           </div>
         </div>
+
+        {/* Rate Limit Stats Section */}
+        <section>
+          <div className="flex items-center gap-2 px-4 mb-3">
+            <Activity size={14} className="text-accent" />
+            <h2 className="text-white/40 text-[10px] font-bold uppercase tracking-widest">Backend Budgets</h2>
+          </div>
+          <div className="glass-liquid rounded-[28px] p-5 flex flex-col gap-4">
+            {Object.entries(stats).length > 0 ? Object.entries(stats).map(([provider, data]) => {
+              // Standard limits for display
+              const limits: any = {
+                COINGECKO: 1440,
+                TWELVE_DATA: 800,
+                ALPHA_VANTAGE: 25,
+                MARKET_AUX: 100,
+                NEWS_API: 100,
+              };
+              const limit = limits[provider] || 100;
+              const pct = Math.round((data.count / limit) * 100);
+              
+              return (
+                <div key={provider} className="flex flex-col gap-1.5">
+                  <div className="flex justify-between text-[9px] uppercase font-bold">
+                    <span className="text-white/60">{provider.replace(/_/g, ' ')}</span>
+                    <span className="text-white/40">{data.count} / {limit}</span>
+                  </div>
+                  <div className="h-1 bg-white/5 rounded-full overflow-hidden">
+                    <div 
+                      className={`h-full rounded-full transition-all duration-500 ${pct > 80 ? 'bg-accent-red' : 'bg-accent'}`}
+                      style={{ width: `${Math.min(pct, 100)}%` }}
+                    />
+                  </div>
+                </div>
+              );
+            }) : (
+              <div className="text-white/20 text-[10px] text-center italic py-2">
+                Connecting to backend node...
+              </div>
+            )}
+          </div>
+        </section>
 
         {/* Settings Sections */}
         {sections.map((section, idx) => (
@@ -64,8 +113,8 @@ export function SettingsPage() {
           </section>
         ))}
 
-        <div className="text-center">
-          <span className="text-white/20 text-[9px] uppercase tracking-widest font-bold">Ortho-M8 OS v26.4 // Liquid Glass Engine</span>
+        <div className="text-center pb-10">
+          <span className="text-white/20 text-[9px] uppercase tracking-widest font-bold">ALTHR TERMINAL v1.0 // LIQUID GLASS CORE</span>
         </div>
       </div>
     </AppShell>

@@ -16,6 +16,7 @@ import { PortfolioPage } from '@/features/apps/PortfolioPage';
 import { SettingsPage } from '@/features/apps/SettingsPage';
 import { useEffect } from 'react';
 import { playSound } from '@/lib/audio';
+import { usePriceAlerts } from '@/lib/hooks/usePriceAlerts';
 
 export default function Home() {
   const activeScreen = useAppStore((s) => s.activeScreen);
@@ -24,6 +25,8 @@ export default function Home() {
   const hasSentWelcome = useAppStore((s) => s.hasSentWelcome);
   const setSentWelcome = useAppStore((s) => s.setSentWelcome);
   const setIslandExpanded = useAppStore((s) => s.setIslandExpanded);
+
+  usePriceAlerts();
 
   useEffect(() => {
     if (!isLocked) {
