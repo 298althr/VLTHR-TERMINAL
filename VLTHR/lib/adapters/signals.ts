@@ -6,7 +6,7 @@ export const signalsAdapter = {
     return await fetchFromBackend('/api/signals/weather', { lat: lat.toString(), lon: lon.toString() }) || [];
   },
 
-  getHNTopStories: async (): Promise<NEWS_ITEM[]> => {
-    return await fetchFromBackend('/api/signals/hn') || [];
+  getHNTopStories: async (limit?: number): Promise<NEWS_ITEM[]> => {
+    return await fetchFromBackend('/api/signals/hn', { limit: (limit || 10).toString() }) || [];
   }
 };

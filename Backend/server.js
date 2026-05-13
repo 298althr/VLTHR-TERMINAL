@@ -1,6 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
+const rateLimitMiddleware = require('express-rate-limit');
 const coingecko = require('./services/coingecko');
 const forex = require('./services/forex');
 const news = require('./services/news');
@@ -13,8 +14,22 @@ const rateLimit = require('./lib/rateLimit');
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+// Request Logging
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url}`);
+  next();
+});
+
 app.use(cors());
 app.use(express.json());
+
+// System Stability Limiter (1000 requests per 15 mins)
+const limiter = rateLimitMiddleware({
+  windowMs: 15 * 60 * 1000,
+  max: 1000,
+  message: { error: 'Too many requests, system throttling active.' }
+});
+app.use('/api/', limiter);
 
 // Health Check
 app.get('/health', (req, res) => res.json({ status: 'healthy', timestamp: new Date() }));
@@ -27,33 +42,34 @@ app.get('/api/crypto/top', async (req, res) => {
 
 // Forex Routes
 app.get('/api/forex/latest', async (req, res) => {
-  const data = await forex.getLatestRates();
-  res.json(data);
+  const { base, symbols } = req.query;
+  const data = await forex.getLatestRates(base, symbols);
+  res.json(data || []);
 });
 
 app.get('/api/forex/history', async (req, res) => {
-  const { base, quote } = req.query;
-  const data = await forex.getHistory(base, quote);
-  res.json(data);
+  const { base, quote, days } = req.query;
+  const data = await forex.getHistory(base, quote, days ? parseInt(days) : 30);
+  res.json(data || { points: [] });
 });
 
 // News Routes
 app.get('/api/news', async (req, res) => {
   const { query } = req.query;
   const data = await news.getMarketNews(query);
-  res.json(data);
+  res.json(data || []);
 });
 
 // Macro Routes
 app.get('/api/macro/indicator', async (req, res) => {
   const { country, indicator } = req.query;
   const data = await macro.getIndicator(country, indicator);
-  res.json(data);
+  res.json(data || { indicator: 'Unavailable', points: [] });
 });
 
 app.get('/api/macro/yields', async (req, res) => {
   const data = await macro.getYieldCurve();
-  res.json(data);
+  res.json(data || { points: [] });
 });
 
 // Equities Routes

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { AppShell } from './AppShell';
 import { signalsAdapter } from '@/lib/adapters/signals';
-import { SIGNAL, NEWS_ITEM } from '@/schemas';
+import { SIGNAL, NEWS_ITEM } from '@/lib/schemas';
 import { Zap, CloudSun, Radio, TrendingUp, ExternalLink, Activity } from 'lucide-react';
 import { motion } from 'framer-motion';
 

@@ -12,7 +12,7 @@ interface AppShellProps {
 }
 
 export function AppShell({ title, children }: AppShellProps) {
-  const { closeApp, setApp } = useAppStore();
+  const { closeApp, openApp } = useAppStore();
   const [command, setCommand] = useState('');
   const [showTerminal, setShowTerminal] = useState(false);
 
@@ -21,11 +21,11 @@ export function AppShell({ title, children }: AppShellProps) {
     const cmd = command.toUpperCase().trim();
     
     // Simple Command Logic
-    if (cmd === 'CRYPTO') setApp('CRYPTO');
-    else if (cmd === 'FOREX') setApp('FOREX');
-    else if (cmd === 'NEWS') setApp('NEWS');
-    else if (cmd === 'MACRO') setApp('MACRO');
-    else if (cmd === 'PORTFOLIO') setApp('PORTFOLIO');
+    if (cmd === 'CRYPTO') openApp('crypto');
+    else if (cmd === 'FOREX') openApp('forex');
+    else if (cmd === 'NEWS') openApp('news');
+    else if (cmd === 'MACRO') openApp('macro');
+    else if (cmd === 'PORTFOLIO') openApp('portfolio');
     else if (cmd.startsWith('GET ')) {
       // Future: Navigate to specific equity detail
     }

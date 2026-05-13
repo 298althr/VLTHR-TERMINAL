@@ -53,9 +53,9 @@ export function MacroPage() {
           <div className="h-[200px] w-full flex items-center justify-center">
             {loading ? (
               <Activity className="text-accent animate-spin" size={24} />
-            ) : indicatorData?.points.length ? (
+            ) : indicatorData?.points?.length ? (
               <FinancialChart 
-                data={indicatorData.points.map(p => ({ t: new Date(p.date).getTime(), o: p.value, h: p.value, l: p.value, c: p.value, v: 0 }))} 
+                data={(indicatorData.points || []).map(p => ({ t: new Date(p.date).getTime(), o: p.value, h: p.value, l: p.value, c: p.value, v: 0 }))} 
                 type="line" 
               />
             ) : (
@@ -86,7 +86,7 @@ export function MacroPage() {
           </div>
 
           <div className="flex flex-col gap-3">
-            {yieldCurve?.points.slice(0, 5).map((point, i) => (
+            {yieldCurve?.points?.slice(0, 5).map((point, i) => (
               <div key={i} className="flex justify-between items-center border-b border-white/5 pb-2 last:border-0">
                 <span className="text-white/60 text-[10px]">{point.date.split('Total ')[1] || point.date}</span>
                 <span className="text-white font-mono text-xs">{point.value.toFixed(2)}%</span>

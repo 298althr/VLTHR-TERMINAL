@@ -5,6 +5,7 @@ import { AppShell } from './AppShell';
 import { Wallet, TrendingUp, TrendingDown, PieChart, Bell, History, Plus, Trash2, Download } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { fetchFromBackend } from '@/lib/api';
+import { playSound } from '@/lib/audio';
 
 interface Holding {
   symbol: string;

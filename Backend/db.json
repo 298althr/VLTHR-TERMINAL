@@ -1,5 +1,18 @@
 {
-  "portfolio": [],
+  "portfolio": [
+    {
+      "symbol": "BTC",
+      "type": "crypto",
+      "amount": 0.5,
+      "buyPrice": 45000
+    },
+    {
+      "symbol": "AAPL",
+      "type": "equity",
+      "amount": 10,
+      "buyPrice": 150
+    }
+  ],
   "alerts": [],
   "settings": {
     "baseCurrency": "USD"

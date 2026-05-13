@@ -52,7 +52,7 @@ export function ForexPage() {
               <span className="text-white/40 text-[10px] uppercase font-bold tracking-widest">Selected Pair</span>
               <h2 className="text-white font-bold text-xl">{selectedPair}</h2>
             </div>
-            {history?.points.length ? (
+            {history?.points?.length ? (
               <div className="flex flex-col items-end">
                 <span className="text-white font-mono text-lg">
                   {history.points[history.points.length - 1].c.toFixed(4)}
@@ -68,7 +68,7 @@ export function ForexPage() {
                 <RefreshCcw className="text-accent animate-spin" size={24} />
               </div>
             )}
-            {history?.points.length ? (
+            {history?.points?.length ? (
               <FinancialChart data={history.points} type="line" />
             ) : (
               <div className="text-white/20 text-xs">No historical data</div>

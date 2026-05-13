@@ -63,7 +63,7 @@ export const FinancialChart = ({
     let series: ISeriesApi<SeriesType>;
 
     if (type === 'line') {
-      const lineSeries = chart.addAreaSeries({
+      const lineSeries = (chart as any).addAreaSeries({
         lineColor,
         topColor: areaTopColor,
         bottomColor: areaBottomColor,
@@ -72,7 +72,7 @@ export const FinancialChart = ({
       lineSeries.setData(data.map(p => ({ time: p.t / 1000 as any, value: p.c })));
       series = lineSeries;
     } else {
-      const candleSeries = chart.addCandlestickSeries({
+      const candleSeries = (chart as any).addCandlestickSeries({
         upColor: '#30d158',
         downColor: '#ff453a',
         borderVisible: false,
