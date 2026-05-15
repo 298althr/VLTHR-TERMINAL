@@ -35,7 +35,7 @@ module.exports = {
       }));
 
       // Save to Parquet snapshots
-      await snapshotParquet.save('crypto', normalized);
+      await snapshotParquet.saveSnapshot('crypto', normalized);
 
       cache.set(cacheKey, normalized, config.CACHE_TTLS.CRYPTO_PRICE);
       return normalized;
@@ -43,7 +43,7 @@ module.exports = {
       console.error('[CoinGecko] Market Fetch Failed:', error.message);
       
       // If live fetch fails, try reading from the latest Parquet snapshot
-      const disk = await snapshotParquet.readLatest('crypto');
+      const disk = await snapshotParquet.readLatestSnapshot('crypto');
       if (disk && disk.length > 0) {
         console.log(`[CoinGecko] Serving ${disk.length} coins from Parquet snapshot.`);
         return disk;
