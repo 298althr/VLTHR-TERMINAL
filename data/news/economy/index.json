@@ -1,0 +1,61 @@
+{
+  "category": "economy",
+  "months": {
+    "2026-05": {
+      "count": 6,
+      "sources": [
+        "seekingalpha.com",
+        "retailtimes.co.uk",
+        "cnbc.com",
+        "insidermonkey.com",
+        "pymnts.com",
+        "economictimes.indiatimes.com"
+      ],
+      "sentimentBreakdown": {
+        "positive": 2,
+        "neutral": 3,
+        "negative": 1
+      }
+    },
+    "2026-04": {
+      "count": 15,
+      "sources": [
+        "foxbusiness.com",
+        "thehindubusinessline.com",
+        "seekingalpha.com",
+        "insidermonkey.com",
+        "livemint.com",
+        "economictimes.indiatimes.com",
+        "timesofindia.indiatimes.com",
+        "cnbc.com",
+        "manilatimes.net",
+        "yahoo.com",
+        "upi.com"
+      ],
+      "sentimentBreakdown": {
+        "neutral": 11,
+        "positive": 3,
+        "negative": 1
+      }
+    },
+    "2026-03": {
+      "count": 9,
+      "sources": [
+        "economictimes.indiatimes.com",
+        "argaam.com",
+        "themarketherald.com.au",
+        "cnbc.com",
+        "asymco.com",
+        "foxbusiness.com",
+        "yahoo.com",
+        "seekingalpha.com"
+      ],
+      "sentimentBreakdown": {
+        "neutral": 7,
+        "negative": 2
+      }
+    }
+  },
+  "total": 30,
+  "updatedAt": "2026-05-14T12:19:10.725Z"
+}

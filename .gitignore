@@ -1,0 +1,32 @@
+# Whitelist approach: Ignore everything by default
+/*
+
+# Essential Directories
+!/VLTHR/
+!/Backend/
+!/data/
+
+# Essential Infrastructure & Docker
+!/Dockerfile
+!/docker-compose.yml
+!/.dockerignore
+!/.gitignore
+!/package.json
+!/package-lock.json
+
+# Core Scripts & Assets
+!/sync.ps1
+!/favicon.svg
+
+# Always ignore environment secrets and local node modules
+node_modules/
+.env*
+*.local
+dist/
+build/
+.next/
+.turbo/
+.vercel/
+.idea/
+.vscode/
+*.log

@@ -1,0 +1,107 @@
+# VLTHR Finance — Docker Compose
+# Orchestrates Next.js frontend, Node.js backend, Python signal engine, and Redis cache.
+# Shared data lake mounted from host ./data to both backend & engine.
+#
+# Usage:
+#   docker-compose up --build          # build & start all services
+#   docker-compose up -d frontend      # frontend only (needs backend running)
+#   docker-compose up -d backend       # backend only
+#   docker-compose up -d data-engine   # python engine only
+#   docker-compose logs -f frontend    # tail frontend logs
+#   docker-compose logs -f backend     # tail backend logs
+
+services:
+  # ─── Next.js Frontend (DEV — hot reload) ─────────────────────
+  frontend:
+    build:
+      context: ./VLTHR
+      dockerfile: Dockerfile
+      target: dev
+    container_name: vlthr-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_BACKEND_URL=http://localhost:4000
+      - WATCHPACK_POLLING=true
+      - CHOKIDAR_USEPOLLING=true
+    volumes:
+      - type: bind
+        source: ./VLTHR
+        target: /app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      backend:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - vlthr-net
+
+  # ─── Node.js Backend ─────────────────────────────────────────
+  backend:
+    build:
+      context: ./Backend
+      dockerfile: Dockerfile
+    container_name: vlthr-backend
+    ports:
+      - "4000:4000"
+    env_file:
+      - ./Backend/.env
+    environment:
+      - DATA_ROOT=/app/data
+      - TELEGRAM_BOT_TOKEN=8977468759:AAEPVnhfjmTFwqFYLNbpCMw_04mLRSAlijA
+      - TELEGRAM_CHAT_ID=8275099903
+    volumes:
+      # Shared data lake (read-write for harvest, read for queries)
+      - type: bind
+        source: ./data
+        target: /app/data
+    depends_on:
+      redis:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - vlthr-net
+
+  # ─── Python Signal Engine ────────────────────────────────────
+  data-engine:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: vlthr-engine
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./Backend/.env
+    volumes:
+      - type: bind
+        source: ./data
+        target: /app/data
+    depends_on:
+      backend:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - vlthr-net
+    # GPU passthrough (requires NVIDIA Container Toolkit on host)
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
+
+  # ─── Redis Cache ─────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: vlthr-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    networks:
+      - vlthr-net
+
+networks:
+  vlthr-net:
+    driver: bridge

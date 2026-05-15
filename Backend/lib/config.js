@@ -1,0 +1,21 @@
+module.exports = {
+  CACHE_TTLS: {
+    CRYPTO_PRICE: 60 * 1000,
+    STOCK_PRICE: 5 * 60 * 1000,
+    FOREX_RATE: 30 * 60 * 1000,
+    NEWS: 10 * 60 * 1000,
+    MACRO: 7 * 24 * 60 * 60 * 1000,
+    FUNDAMENTALS: 24 * 60 * 60 * 1000,
+    WEATHER: 60 * 60 * 1000,
+  },
+  
+  RATE_LIMITS: {
+    COINGECKO: 1440,
+    TWELVE_DATA: 800,
+    ALPHA_VANTAGE: 25,
+    FINANCIAL_MODELING_PREP: 250,
+    MARKET_AUX: 100,
+    NEWS_API: 100,
+    GNEWS: 100,
+  }
+};

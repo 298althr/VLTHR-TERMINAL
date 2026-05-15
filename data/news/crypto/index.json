@@ -1,0 +1,49 @@
+{
+  "category": "crypto",
+  "months": {
+    "2026-05": {
+      "count": 6,
+      "sources": [
+        "manilatimes.net",
+        "financefeeds.com",
+        "investinghaven.com",
+        "economictimes.indiatimes.com"
+      ],
+      "sentimentBreakdown": {
+        "positive": 2,
+        "negative": 3,
+        "neutral": 1
+      }
+    },
+    "2026-04": {
+      "count": 15,
+      "sources": [
+        "manilatimes.net",
+        "financefeeds.com",
+        "finance.yahoo.com",
+        "benzinga.com",
+        "thestockmarketwatch.com"
+      ],
+      "sentimentBreakdown": {
+        "neutral": 13,
+        "positive": 2
+      }
+    },
+    "2026-03": {
+      "count": 9,
+      "sources": [
+        "manilatimes.net",
+        "financefeeds.com",
+        "benzinga.com",
+        "economictimes.indiatimes.com"
+      ],
+      "sentimentBreakdown": {
+        "neutral": 5,
+        "negative": 3,
+        "positive": 1
+      }
+    }
+  },
+  "total": 30,
+  "updatedAt": "2026-05-14T12:18:39.542Z"
+}

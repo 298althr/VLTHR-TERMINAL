@@ -1,0 +1,21 @@
+{
+  "name": "althr-terminal-root",
+  "version": "1.0.0",
+  "private": true,
+  "main": "electron/main.cjs",
+  "scripts": {
+    "electron:dev": "concurrently \"npm --prefix VLTHR run dev\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron:build": "npm --prefix VLTHR run build && electron-builder",
+    "docker:up": "docker-compose up --build -d",
+    "docker:down": "docker-compose down"
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "electron": "^30.0.0",
+    "electron-builder": "^24.13.3",
+    "wait-on": "^7.2.0"
+  },
+  "dependencies": {
+    "electron-is-dev": "^3.0.1"
+  }
+}

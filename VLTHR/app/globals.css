@@ -1,0 +1,484 @@
+@import "tailwindcss";
+
+@theme {
+  --color-accent: var(--accent);
+  --color-accent-green: var(--accent-green);
+  --color-accent-red: var(--accent-red);
+  --color-accent-orange: var(--accent-orange);
+  
+  --font-mono: var(--font-mono);
+  
+  --shadow-elevated: var(--shadow-elevated);
+}
+
+:root {
+  /* Colors — macOS Ventura Desktop palette */
+  --bg-primary: #1e1e1e;
+  --bg-secondary: #2d2d2d;
+  --bg-tertiary: #3a3a3a;
+  --bg-glass: rgba(255, 255, 255, 0.12);
+  --bg-glass-thick: rgba(255, 255, 255, 0.72);
+
+  --text-primary: #f5f5f7;
+  --text-secondary: rgba(245, 245, 247, 0.7);
+  --text-tertiary: rgba(245, 245, 247, 0.4);
+
+  --accent: #0071e3;
+  /* macOS blue */
+  --accent-green: #28c840;
+  /* macOS green */
+  --accent-red: #ff5f57;
+  /* macOS red */
+  --accent-orange: #febc2e;
+  /* macOS yellow/orange */
+
+  /* Blur values */
+  --blur-light: blur(10px);
+  --blur-medium: blur(20px);
+  --blur-heavy: blur(40px);
+
+  /* Shadows */
+  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --shadow-medium: 0 8px 24px rgba(0, 0, 0, 0.4);
+  --shadow-elevated: 0 16px 48px rgba(0, 0, 0, 0.5);
+
+  /* Typography */
+  --font-system: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, monospace;
+
+  /* Spacing (iOS 8pt grid) */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+
+  /* Radius */
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-full: 9999px;
+
+  /* Custom Scrollbar Colors */
+  --sb-track: rgba(255, 255, 255, 0.03);
+  --sb-thumb: rgba(255, 255, 255, 0.15);
+  --sb-thumb-hover: rgba(255, 255, 255, 0.25);
+}
+
+/* Global Scrollbar Overrides */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--sb-thumb) var(--sb-track);
+}
+
+/* Chrome, Edge, and Safari */
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--sb-track);
+  border-radius: 10px;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--sb-thumb);
+  border-radius: 10px;
+  border: 1px solid transparent;
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--sb-thumb-hover);
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+/* Custom Range/Slider Input */
+input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  background: transparent;
+  cursor: pointer;
+  width: 100%;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  background: rgba(255, 255, 255, 0.1);
+  height: 4px;
+  border-radius: 2px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  margin-top: -6px; /* Center thumb on track */
+  background-color: var(--accent);
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  transition: transform 0.1s ease;
+}
+
+input[type="range"]:active::-webkit-slider-thumb {
+  transform: scale(1.2);
+}
+
+/* Custom Checkbox */
+input[type="checkbox"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  cursor: pointer;
+  position: relative;
+  transition: all 0.2s;
+}
+
+input[type="checkbox"]:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+input[type="checkbox"]:checked::after {
+  content: "✓";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+/* Custom Button Base */
+@utility btn-custom {
+  @apply flex items-center justify-center gap-2 px-4 py-2 rounded-xl transition-all active:scale-95 disabled:opacity-50 disabled:pointer-events-none;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.btn-custom-primary {
+  @apply btn-custom;
+  background: var(--accent);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-custom-danger {
+  @apply btn-custom;
+  background: var(--accent-red);
+}
+
+/* Custom Tooltip */
+[data-tooltip] {
+  position: relative;
+}
+
+[data-tooltip]::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-8px);
+  padding: 4px 8px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  color: white;
+  font-size: 10px;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: all 0.2s;
+  z-index: 100;
+}
+
+[data-tooltip]:hover::before {
+  opacity: 1;
+  transform: translateX(-50%) translateY(-4px);
+}
+
+/* Critical body styles */
+html,
+body {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-system);
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  overflow: hidden;
+  touch-action: none;
+  overscroll-behavior: contain;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+  @apply antialiased bg-black;
+}
+
+/* macOS Window Chrome */
+.macos-window {
+  background: rgba(18, 18, 24, 0.96);
+  backdrop-filter: blur(40px) saturate(160%);
+  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 12px;
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.6),
+    0 20px 60px -10px rgba(0, 0, 0, 0.9),
+    0 8px 20px -4px rgba(0, 0, 0, 0.7);
+}
+
+/* macOS Traffic Lights */
+.traffic-light {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: filter 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 8px;
+  color: rgba(0, 0, 0, 0.5);
+}
+.traffic-light:hover::after {
+  content: attr(data-symbol);
+}
+
+.traffic-light-red    { background: #ff5f57; border: 0.5px solid rgba(0,0,0,0.2); }
+.traffic-light-yellow { background: #febc2e; border: 0.5px solid rgba(0,0,0,0.2); }
+.traffic-light-green  { background: #28c840; border: 0.5px solid rgba(0,0,0,0.2); }
+
+.traffic-light-red:hover    { filter: brightness(0.9); }
+.traffic-light-yellow:hover { filter: brightness(0.9); }
+.traffic-light-green:hover  { filter: brightness(0.9); }
+
+/* macOS Menu Bar */
+.macos-menubar {
+  background: rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(30px) saturate(200%);
+  -webkit-backdrop-filter: blur(30px) saturate(200%);
+}
+
+/* iOS 26 Liquid Glass - Ultra High Fidelity */
+.glass-liquid {
+  background: rgba(255, 255, 255, 0.03);
+  backdrop-filter: blur(40px) saturate(180%);
+  -webkit-backdrop-filter: blur(40px) saturate(180%);
+}
+
+.waterglass-sphere {
+  position: relative;
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px) saturate(150%);
+  -webkit-backdrop-filter: blur(12px) saturate(150%);
+  box-shadow: 
+    inset 0 0 20px rgba(255, 255, 255, 0.05),
+    inset 0 4px 15px rgba(255, 255, 255, 0.2),
+    inset 0 -4px 15px rgba(0, 0, 0, 0.2),
+    0 8px 32px rgba(0, 0, 0, 0.3);
+  overflow: hidden;
+}
+
+.waterglass-sphere::after {
+  content: '';
+  position: absolute;
+  top: 10%;
+  left: 15%;
+  width: 70%;
+  height: 35%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0.3), transparent);
+  border-radius: 50% 50% 40% 40%;
+  pointer-events: none;
+}
+
+/* macOS Desktop Wallpaper */
+.bg-ventura-wallpaper {
+  background: url('https://images.unsplash.com/photo-1686848429284-d108e021a74c?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat fixed;
+}
+
+/* macOS Lockscreen Wallpaper */
+.bg-lockscreen-ventura {
+  background: url('https://images.unsplash.com/photo-1658660854207-8886b1d69bb8?q=80&w=1170&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat fixed;
+}
+
+/* Consistency for mobile homescreen */
+.bg-homescreen-wallpaper {
+  background: url('https://images.unsplash.com/photo-1686848429284-d108e021a74c?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat fixed;
+}
+
+/* Glass surface utility */
+.glass {
+  background: var(--bg-glass);
+  backdrop-filter: var(--blur-medium);
+  -webkit-backdrop-filter: var(--blur-medium);
+}
+
+.glass-thick {
+  background: rgba(36, 36, 52, 0.82);
+  backdrop-filter: blur(40px) saturate(160%);
+  -webkit-backdrop-filter: blur(40px) saturate(160%);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    0 8px 32px -8px rgba(0, 0, 0, 0.6);
+}
+
+/* Animated Purple Background */
+.bg-home-animated {
+  background: linear-gradient(-45deg, #0f0c29, #302b63, #24243e, #1a0a2e);
+  background-size: 400% 400%;
+  animation: gradient 15s ease infinite;
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+/* Dark Liquid Glass — for dock and dark surface panels */
+.glass-dark {
+  background: rgba(10, 10, 16, 0.88);
+  backdrop-filter: blur(40px) saturate(180%) brightness(0.85);
+  -webkit-backdrop-filter: blur(40px) saturate(180%) brightness(0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow:
+    inset 0 1px 0 0 rgba(255, 255, 255, 0.07),  /* Top specular rim */
+    inset 0 -1px 0 0 rgba(0, 0, 0, 0.4),         /* Bottom depth */
+    0 24px 64px -12px rgba(0, 0, 0, 0.7);        /* Deep lift shadow */
+}
+
+/* iOS 26 Ultimate Liquid Glass */
+.glass-liquid {
+  background: rgba(30, 30, 42, 0.90);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+
+  /* Specular Highlight & Inner Refraction */
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    inset 0 1px 1px 0 rgba(255, 255, 255, 0.12),  /* Top highlight */
+    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.3),        /* Bottom depth */
+    0 8px 32px -8px rgba(0, 0, 0, 0.6);           /* Outer drop shadow */
+}
+
+/* iOS 26 Waterglass Sphere — Audit v2: Full Optical Physics */
+.waterglass-sphere {
+  /* Convex lens: bright specular at top-left fading to transparent */
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.1) 40%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  /* Q2: saturate(200%) + contrast(110%) = leaded crystal thickness */
+  backdrop-filter: blur(25px) saturate(200%) contrast(110%);
+  -webkit-backdrop-filter: blur(25px) saturate(200%) contrast(110%);
+  /* Fresnel rim: thicker, higher opacity = edge specularity */
+  border: 1.5px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    inset 0 10px 20px -5px rgba(255, 255, 255, 0.5),  /* Primary top flare */
+    inset 0 -10px 20px -5px rgba(255, 255, 255, 0.2), /* Bottom caustic refraction */
+    0 15px 30px -5px rgba(0, 0, 0, 0.4);              /* Depth lift shadow */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.2s cubic-bezier(0.15, 0, 0.15, 1);
+}
+
+/* Surface Tension: inner meniscus ring simulating liquid edge */
+.waterglass-sphere::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: inherit;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  pointer-events: none;
+}
+
+/* Caustics: concentrated light at bottom-center */
+.waterglass-sphere::after {
+  content: '';
+  position: absolute;
+  bottom: -5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 55%;
+  height: 35%;
+  background: radial-gradient(ellipse, rgba(255, 255, 255, 0.22) 0%, transparent 70%);
+  pointer-events: none;
+}
+
+.waterglass-sphere:active {
+  transform: scale(0.9);
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255, 255, 255, 0.5) 0%,
+    rgba(255, 255, 255, 0.15) 40%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  backdrop-filter: blur(20px) saturate(220%) contrast(115%);
+  -webkit-backdrop-filter: blur(20px) saturate(220%) contrast(115%);
+}
+
+/* 
+   TUNING SECTION: GLASS CLARITY 
+   Lower the decimal (e.g., 0.2) for MORE clarity.
+   Higher the decimal (e.g., 0.8) for MORE tint/opacity.
+*/
+
+.glass-homescreen {
+  background: rgba(0, 0, 0, 0.3);
+  /* 70% Clarity */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.glass-apps {
+  background: rgba(0, 0, 0, 0.25);
+  /* 75% Clarity */
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.glass-island {
+  background: rgba(0, 0, 0, 0.5);
+  /* 50% Tinted Overlay */
+  backdrop-filter: blur(15px);
+}
+
+/* Removed iOS Wallpaper suite */
+
+/* Island Motion Background (Opaque) */
+.bg-island-animated {
+  background: #000000;
+  /* No transparency to content behind it */
+}

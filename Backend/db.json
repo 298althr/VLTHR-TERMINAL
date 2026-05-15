@@ -1,0 +1,39 @@
+{
+  "portfolio": [
+    {
+      "symbol": "BTC",
+      "type": "crypto",
+      "amount": 0.5,
+      "buyPrice": 45000
+    },
+    {
+      "symbol": "AAPL",
+      "type": "equity",
+      "amount": 10,
+      "buyPrice": 150
+    }
+  ],
+  "alerts": [],
+  "settings": {
+    "baseCurrency": "USD"
+  },
+  "quotaUsage": {
+    "date": "2026-05-14",
+    "consumption": {
+      "TWELVE_DATA": 528,
+      "ALPHA_VANTAGE": 0,
+      "COINGECKO": 0,
+      "NEWS_API": 0,
+      "MARKETAUX": 0,
+      "WORLD_BANK": 1
+    },
+    "lastRequestTimes": {
+      "TWELVE_DATA": 1778748753954,
+      "ALPHA_VANTAGE": 0,
+      "COINGECKO": 0,
+      "NEWS_API": 0,
+      "MARKETAUX": 0,
+      "WORLD_BANK": 0
+    }
+  }
+}

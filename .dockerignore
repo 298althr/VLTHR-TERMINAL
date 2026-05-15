@@ -1,0 +1,34 @@
+# Root .dockerignore — excludes from Docker build context
+# (Volume mounts in docker-compose.yml are NOT affected by this file)
+
+# Node
+Backend/node_modules
+VLTHR/node_modules
+VLTHR/.next
+
+# Python
+__pycache__
+*.pyc
+*.pyo
+*.egg-info
+.venv
+venv/
+
+# Env & Secrets
+.env
+.env.local
+.env.*
+
+# Data lake (host-mounted, no need to COPY into image)
+data/
+
+# Git & IDE
+.git
+.gitignore
+.vscode
+.idea
+
+# Docs & Misc
+*.md
+docs/
+*.log

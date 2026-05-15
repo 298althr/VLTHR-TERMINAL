@@ -1,0 +1,57 @@
+{
+  "category": "finance",
+  "months": {
+    "2026-05": {
+      "count": 6,
+      "sources": [
+        "reinsurancene.ws",
+        "seekingalpha.com",
+        "insurancejournal.com"
+      ],
+      "sentimentBreakdown": {
+        "positive": 2,
+        "neutral": 4
+      }
+    },
+    "2026-04": {
+      "count": 15,
+      "sources": [
+        "themarketherald.com.au",
+        "foxbusiness.com",
+        "economictimes.indiatimes.com",
+        "smallcaps.com.au",
+        "manilatimes.net",
+        "timesofindia.indiatimes.com",
+        "cnbc.com",
+        "insidermonkey.com",
+        "upi.com",
+        "thestockmarketwatch.com",
+        "finews.asia"
+      ],
+      "sentimentBreakdown": {
+        "neutral": 10,
+        "positive": 4,
+        "negative": 1
+      }
+    },
+    "2026-03": {
+      "count": 9,
+      "sources": [
+        "economictimes.indiatimes.com",
+        "manilatimes.net",
+        "seekingalpha.com",
+        "cnbc.com",
+        "financialpost.com",
+        "argaam.com",
+        "smallcaps.com.au"
+      ],
+      "sentimentBreakdown": {
+        "neutral": 7,
+        "negative": 1,
+        "positive": 1
+      }
+    }
+  },
+  "total": 30,
+  "updatedAt": "2026-05-14T12:18:06.454Z"
+}
