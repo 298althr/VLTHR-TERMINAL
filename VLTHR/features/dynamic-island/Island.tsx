@@ -101,18 +101,23 @@ export function Island() {
         className="relative shadow-2xl overflow-hidden pointer-events-auto cursor-pointer"
       >
         {/* Liquid Glass Background - Looping Video */}
-        <div className="absolute inset-0 z-0 overflow-hidden">
+        <div className="absolute inset-0 z-0 overflow-hidden rounded-[inherit]">
           <video
             autoPlay
             loop
             muted
             playsInline
-            className="absolute inset-0 w-full h-full object-cover opacity-60 brightness-50 contrast-125 scale-110"
-            style={{ filter: 'blur(30px) saturate(180%)' }}
+            key="island-bg-video"
+            className="absolute inset-0 w-full h-full object-cover scale-110"
+            style={{ 
+              filter: 'blur(30px) saturate(180%) brightness(0.4) contrast(1.1)',
+              backgroundColor: '#000'
+            }}
           >
             <source src="https://res.cloudinary.com/dgz88jxiy/video/upload/v1774275215/5194152d6e6336320208e8d976e40aa9_ripmvb.mp4" type="video/mp4" />
           </video>
-          <div className="absolute inset-0 bg-black/40" />
+          {/* Tinted glass overlay */}
+          <div className="absolute inset-0 bg-black/60 backdrop-blur-3xl" />
         </div>
 
         <div className="relative z-10 h-full w-full flex flex-col">
