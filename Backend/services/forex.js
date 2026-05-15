@@ -9,15 +9,23 @@ const FRANKFURTER_BASE = 'https://api.frankfurter.app';
 
 module.exports = {
   getLatestRates: async (base = 'USD', symbols = 'EUR,GBP,JPY,CHF,AUD,CAD,CNY,HKD') => {
-    // 1. Try Snapshot first
+    const requestedSymbols = symbols.split(',').map(s => s.trim());
+
+    // 1. Try Snapshot first — filter by requested symbols
     const snapshot = await snapshotParquet.readLatestSnapshot('forex');
     if (snapshot && snapshot.length > 0) {
-      console.log(`[ForexService] Serving Latest Rates from Disk Snapshot`);
-      return snapshot.map(item => ({
-        ...item,
-        name: `${base} to ${item.symbol.split('/')[1]}`,
-        source: 'Parquet Snapshot'
-      }));
+      const filtered = snapshot.filter(item => {
+        const quote = item.symbol.split('/')[1];
+        return requestedSymbols.includes(quote);
+      });
+      if (filtered.length > 0) {
+        console.log(`[ForexService] Serving ${filtered.length} rates from Disk Snapshot`);
+        return filtered.map(item => ({
+          ...item,
+          name: `${base} to ${item.symbol.split('/')[1]}`,
+          source: 'Parquet Snapshot'
+        }));
+      }
     }
 
     // 2. Fallback to Cache

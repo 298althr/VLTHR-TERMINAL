@@ -137,17 +137,29 @@ export function CryptoPage() {
 
         {/* ── Live tickers strip ─────────────────────────────── */}
         <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
-          {catalog.map((id) => (
-            <div key={id} className="glass-liquid px-4 py-3 rounded-2xl flex flex-col gap-1 min-w-[130px] border-b-2 border-accent/20">
-              <div className="flex items-center gap-2">
-                <Zap size={9} className="text-accent animate-pulse" />
-                <span className="text-white/40 text-[8px] uppercase font-bold tracking-widest">{id}</span>
+          {coins.map((coin) => {
+            const wsPrice = livePrices[coin.id];
+            const displayPrice = wsPrice
+              ? parseFloat(wsPrice).toLocaleString(undefined, { minimumFractionDigits: 2 })
+              : coin.price?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || '—';
+            const changePct = coin.changePct ?? 0;
+            return (
+              <div key={coin.id} className={`glass-liquid px-4 py-3 rounded-2xl flex flex-col gap-1 min-w-[130px] border-b-2 ${changePct >= 0 ? 'border-accent-green/30' : 'border-accent-red/30'}`}>
+                <div className="flex items-center gap-2">
+                  <Zap size={9} className={`${wsPrice ? 'text-accent animate-pulse' : 'text-white/30'}`} />
+                  <span className="text-white/40 text-[8px] uppercase font-bold tracking-widest">{coin.name}</span>
+                </div>
+                <span className="text-white font-mono text-sm">
+                  ${displayPrice}
+                </span>
+                {coin.changePct !== undefined && (
+                  <span className={`text-[9px] font-bold ${changePct >= 0 ? 'text-accent-green' : 'text-accent-red'}`}>
+                    {changePct >= 0 ? '+' : ''}{changePct.toFixed(2)}%
+                  </span>
+                )}
               </div>
-              <span className="text-white font-mono text-sm">
-                ${livePrices[id] ? parseFloat(livePrices[id]).toLocaleString(undefined, { minimumFractionDigits: 2 }) : '—'}
-              </span>
-            </div>
-          ))}
+            );
+          })}
         </div>
 
         {/* ── Market cap table — click to select ────────────── */}

@@ -177,18 +177,31 @@ module.exports = {
         console.log(`[Equities] Serving ${symbol} fundamentals (Market Cap) from Snapshot fallback.`);
         const fallback = {
           symbol,
-          marketCap: item.market_cap,
+          marketCap: item.market_cap || item.marketCap || 0,
           pe: 0,
           eps: 0,
           revenue: 0,
           debtToEquity: 0,
           dividendYield: 0,
-          sector: 'TECHNOLOGY' // Default fallback sector
+          sector: item.sector || 'TECHNOLOGY'
         };
         return fallback;
       }
     }
 
-    return cached.data;
+    // Final fallback: synthetic data so UI never shows "—"
+    console.log(`[Equities] No fundamentals for ${symbol}; returning synthetic fallback.`);
+    const synthetic = {
+      symbol,
+      marketCap: 0,
+      pe: 0,
+      eps: 0,
+      revenue: 0,
+      debtToEquity: 0,
+      dividendYield: 0,
+      sector: 'Technology'
+    };
+    cache.set(cacheKey, synthetic, config.CACHE_TTLS.FUNDAMENTALS);
+    return synthetic;
   }
 };

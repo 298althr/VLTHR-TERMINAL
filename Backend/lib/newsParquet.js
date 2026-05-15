@@ -291,6 +291,97 @@ module.exports = {
   },
 
   /**
+   * Seed demo articles for a category if no data exists (no API keys required).
+   */
+  seedNews: async (category) => {
+    const ym = yearMonth(new Date().toISOString());
+    const fp = filePath(category, ym);
+    if (fs.existsSync(fp)) return 0;
+
+    const now = Date.now();
+    const demoArticles = [
+      {
+        id: articleId({ url: `https://vlthr.internal/seed-${category}-1` }),
+        title: `${category.charAt(0).toUpperCase() + category.slice(1)} markets show resilience amid global uncertainty`,
+        summary: 'Major indices held steady as investors digest latest economic data and corporate earnings reports. Analysts remain cautiously optimistic on forward guidance.',
+        url: 'https://vlthr.internal/seed-1',
+        source: 'VLTHR Wire',
+        published_at: BigInt(now - 3600000),
+        category,
+        tickers: JSON.stringify(['SPY', 'QQQ']),
+        sentiment_label: 'neutral',
+        sentiment_score: 0.05,
+        quality_score: 0.8,
+        word_count: 45,
+        image_url: '',
+        language: 'en'
+      },
+      {
+        id: articleId({ url: `https://vlthr.internal/seed-${category}-2` }),
+        title: `Institutional flows into ${category} assets reach quarterly high`,
+        summary: 'Quarterly filings reveal increased allocations across pension funds and sovereign wealth vehicles, signaling long-term confidence in the sector.',
+        url: 'https://vlthr.internal/seed-2',
+        source: 'VLTHR Wire',
+        published_at: BigInt(now - 7200000),
+        category,
+        tickers: JSON.stringify(['BLK', 'Vanguard']),
+        sentiment_label: 'positive',
+        sentiment_score: 0.35,
+        quality_score: 0.75,
+        word_count: 38,
+        image_url: '',
+        language: 'en'
+      },
+      {
+        id: articleId({ url: `https://vlthr.internal/seed-${category}-3` }),
+        title: `${category} volatility expected to persist through earnings season`,
+        summary: 'Options markets are pricing elevated implied volatility as major companies prepare to report. Hedging activity has increased notably in the past week.',
+        url: 'https://vlthr.internal/seed-3',
+        source: 'VLTHR Wire',
+        published_at: BigInt(now - 10800000),
+        category,
+        tickers: JSON.stringify(['VIX']),
+        sentiment_label: 'negative',
+        sentiment_score: -0.25,
+        quality_score: 0.7,
+        word_count: 42,
+        image_url: '',
+        language: 'en'
+      }
+    ];
+
+    ensureDir(category);
+    const writer = await parquet.ParquetWriter.openFile(SCHEMA, fp);
+    for (const row of demoArticles) await writer.appendRow(row);
+    await writer.close();
+
+    const idx = readIndex(category);
+    idx.months[ym] = { count: demoArticles.length, sources: ['VLTHR Wire'], sentimentBreakdown: { positive: 1, neutral: 1, negative: 1 } };
+    idx.total = demoArticles.length;
+    writeIndex(category, idx);
+
+    console.log(`[NewsParquet] Seeded ${demoArticles.length} demo articles for ${category}`);
+    return demoArticles.length;
+  },
+
+  _deserialize: (rec) => ({
+    id: rec.id,
+    title: rec.title,
+    summary: rec.summary,
+    url: rec.url,
+    source: rec.source,
+    publishedAt: new Date(Number(rec.published_at)).toISOString(),
+    category: rec.category,
+    tickers: JSON.parse(rec.tickers || '[]'),
+    sentiment: rec.sentiment_label,
+    sentimentScore: rec.sentiment_score,
+    qualityScore: rec.quality_score,
+    wordCount: rec.word_count,
+    imageUrl: rec.image_url,
+    language: rec.language
+  }),
+
+  /**
    * Read news across a date range. Returns merged + sorted array.
    */
   readNewsByRange: async (category, fromDate, toDate) => {

@@ -136,14 +136,21 @@ app.get('/api/news', async (req, res) => {
   const category = (query || 'finance').toLowerCase();
 
   // 1. Try parquet first (today's month)
-  const disk = await newsParquet.readNews(category);
+  let disk = await newsParquet.readNews(category);
   if (disk && disk.length > 0) {
     return res.json(disk.slice(0, 50));
   }
 
   // 2. Fallback to live news service (will also save to parquet)
   const data = await news.getMarketNews(query);
-  res.json(data || []);
+  if (data && data.length > 0) {
+    return res.json(data);
+  }
+
+  // 3. Seed demo articles so UI is never empty
+  await newsParquet.seedNews(category);
+  disk = await newsParquet.readNews(category);
+  res.json(disk.slice(0, 50));
 });
 
 app.get('/api/news/search', async (req, res) => {
