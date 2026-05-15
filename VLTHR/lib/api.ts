@@ -1,5 +1,11 @@
 const getBackendUrl = () => {
-  const url = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+  let url = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+  
+  // Force https if it's a production railway URL and protocol is missing
+  if (url.includes('railway.app') && !url.startsWith('http')) {
+    url = `https://${url}`;
+  }
+  
   return url.endsWith('/') ? url.slice(0, -1) : url;
 };
 

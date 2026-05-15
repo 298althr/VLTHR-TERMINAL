@@ -173,11 +173,17 @@ export const useAppStore = create<AppState>()(
           return;
         }
 
-        const rawUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+        let rawUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+        if (rawUrl.includes('railway.app') && !rawUrl.startsWith('http')) {
+          rawUrl = `https://${rawUrl}`;
+        }
         const baseUrl = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl;
 
         try {
-          const res = await fetch(`${baseUrl}/api/auth/request-code`, { method: 'POST' });
+          const res = await fetch(`${baseUrl}/api/auth/request-code`, { 
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' }
+          });
           const data = await res.json();
           if (data.success) {
             set({ codeRequested: true, lastRequestTime: now });
@@ -205,7 +211,10 @@ export const useAppStore = create<AppState>()(
 
         set({ isVerifying: true });
         setLoading(true);
-        const rawUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+        let rawUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+        if (rawUrl.includes('railway.app') && !rawUrl.startsWith('http')) {
+          rawUrl = `https://${rawUrl}`;
+        }
         const baseUrl = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl;
         
         try {
