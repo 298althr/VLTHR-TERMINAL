@@ -1,7 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 
-const DB_PATH = path.join(__dirname, '../db.json');
+const DATA_DIR = process.env.DATA_ROOT || '/app/data';
+const DB_PATH = path.join(DATA_DIR, 'db.json');
+
+// Ensure data directory exists
+if (!fs.existsSync(DATA_DIR)) {
+  fs.mkdirSync(DATA_DIR, { recursive: true });
+}
 
 // Initialize DB if not exists
 if (!fs.existsSync(DB_PATH)) {

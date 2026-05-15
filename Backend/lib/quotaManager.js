@@ -17,7 +17,7 @@ const PROVIDER_LIMITS = {
   WORLD_BANK:    { rpd: 24000, rpm: 20 }
 };
 
-const LOCK_DIR = path.join(__dirname, '.quota-lock');
+const LOCK_DIR = path.join(process.env.DATA_ROOT || '/app/data', '.quota-lock');
 const LOCK_MAX_AGE_MS = 30000; // 30s — longer than max RPM sleep (~7.5s)
 
 class QuotaManager {
