@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>VLTHR API Debug</title>
+  <style>
+    body { font-family: monospace; background: #0a0a10; color: #f5f5f7; padding: 20px; }
+    .pass { color: #28c840; }
+    .fail { color: #ff5f57; }
+    .info { color: #0071e3; }
+    pre { background: rgba(255,255,255,0.05); padding: 10px; border-radius: 8px; overflow-x: auto; }
+    button { background: #0071e3; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin: 5px; }
+  </style>
+</head>
+<body>
+  <h1>VLTHR API Diagnostics</h1>
+  <p class="info">Backend URL: <span id="backend-url"></span></p>
+  <button onclick="testHealth()">Test Health</button>
+  <button onclick="testCrypto()">Test Crypto History</button>
+  <button onclick="testEquities()">Test Equities History</button>
+  <button onclick="testCatalog()">Test Catalog</button>
+  <button onclick="testNews()">Test News</button>
+  <div id="results"></div>
+
+  <script>
+    const BACKEND_URL = 'https://vlthr-terminal-production.up.railway.app';
+    document.getElementById('backend-url').textContent = BACKEND_URL;
+
+    function log(label, data, isError = false) {
+      const div = document.getElementById('results');
+      const cls = isError ? 'fail' : (data ? 'pass' : 'info');
+      const pre = document.createElement('pre');
+      pre.innerHTML = `<span class="${cls}">${label}</span>\n${typeof data === 'string' ? data : JSON.stringify(data, null, 2)}`;
+      div.prepend(pre);
+    }
+
+    async function testHealth() {
+      try {
+        const res = await fetch(`${BACKEND_URL}/health`, { cache: 'no-store' });
+        const data = await res.json();
+        log('Health Check', { status: res.status, data });
+      } catch (e) {
+        log('Health Check FAILED', e.message, true);
+      }
+    }
+
+    async function testCrypto() {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/crypto/history?symbol=BTC/USD&interval=1day`, { cache: 'no-store' });
+        const data = await res.json();
+        log('Crypto History (BTC/USD 1D)', {
+          status: res.status,
+          hasPoints: !!data?.points,
+          pointCount: data?.points?.length || 0,
+          firstPoint: data?.points?.[0] || null,
+          symbol: data?.symbol
+        });
+      } catch (e) {
+        log('Crypto History FAILED', e.message, true);
+      }
+    }
+
+    async function testEquities() {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/equities/history?symbol=AAPL&interval=1day`, { cache: 'no-store' });
+        const data = await res.json();
+        log('Equities History (AAPL 1D)', {
+          status: res.status,
+          hasPoints: !!data?.points,
+          pointCount: data?.points?.length || 0,
+          firstPoint: data?.points?.[0] || null,
+          symbol: data?.symbol
+        });
+      } catch (e) {
+        log('Equities History FAILED', e.message, true);
+      }
+    }
+
+    async function testCatalog() {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/catalog`, { cache: 'no-store' });
+        const data = await res.json();
+        log('Catalog', {
+          status: res.status,
+          cryptoCount: data?.crypto?.length || 0,
+          equitiesCount: data?.equities?.length || 0,
+          forexCount: data?.forex?.length || 0,
+          crypto: data?.crypto?.slice(0, 5)
+        });
+      } catch (e) {
+        log('Catalog FAILED', e.message, true);
+      }
+    }
+
+    async function testNews() {
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/news?query=finance`, { cache: 'no-store' });
+        const data = await res.json();
+        log('News (finance)', {
+          status: res.status,
+          count: Array.isArray(data) ? data.length : 0,
+          first: Array.isArray(data) ? data[0] : data
+        });
+      } catch (e) {
+        log('News FAILED', e.message, true);
+      }
+    }
+
+    // Auto-run health on load
+    testHealth();
+  </script>
+</body>
+</html>
