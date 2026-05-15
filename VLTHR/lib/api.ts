@@ -1,6 +1,7 @@
+const RAILWAY_URL = 'https://vlthr-terminal-production.up.railway.app';
+
 const getBackendUrl = () => {
-  // In production, this MUST be set as NEXT_PUBLIC_BACKEND_URL on Vercel
-  let url = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+  let url = process.env.NEXT_PUBLIC_BACKEND_URL || RAILWAY_URL;
 
   // Force https if it's a production railway URL and protocol is missing
   if (url.includes('railway.app') && !url.startsWith('http')) {
