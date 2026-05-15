@@ -243,16 +243,7 @@ app.get('/api/alerts/check', async (req, res) => {
   res.json({ triggered: [] }); 
 });
 
-// Stats Route
-app.get('/api/stats', (req, res) => {
-  const providers = ['COINGECKO', 'TWELVE_DATA', 'ALPHA_VANTAGE', 'FINANCIAL_MODELING_PREP', 'MARKET_AUX', 'NEWS_API', 'GNEWS'];
-  const stats = {};
-  providers.forEach(p => {
-    stats[p] = rateLimit.getStats(p);
-  });
-  res.json(stats);
-});
-
+// Stats Route - Backend Budgets
 app.get('/api/stats', (req, res) => {
   res.json(quotaManager.getStats());
 });
