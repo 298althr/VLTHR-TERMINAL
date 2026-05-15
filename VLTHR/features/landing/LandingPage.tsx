@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { useAppStore } from '@/store/useAppStore';
 import { playSound } from '@/lib/audio';
 import { useEffect, useState } from 'react';
-import { Lock, Zap, Globe } from 'lucide-react';
+import { usePWAInstall } from '@/hooks/usePWAInstall';
 
 // Animated counter hook
 function useCounter(target: number, duration: number = 2000, prefix = '', suffix = '') {
@@ -44,7 +44,7 @@ function NoiseOverlay() {
 // Ambient orbs
 function AmbientOrbs() {
   return (
-    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
+    <div className="pointer-events-none fixed inset-0 z-[2] overflow-hidden">
       {/* Primary blue orb */}
       <motion.div
         className="absolute rounded-full"
@@ -243,11 +243,16 @@ export function LandingPage() {
   const setLanding = useAppStore((s) => s.setLanding);
   const [entered, setEntered] = useState(false);
 
-  const handleEnter = () => {
+  const { canInstall, promptInstall } = usePWAInstall();
+
+  const handleEnter = async () => {
     if (entered) return;
     setEntered(true);
     try { playSound('tap'); } catch {}
-    setTimeout(() => setLanding(false), 600);
+    if (canInstall) {
+      await promptInstall();
+    }
+    setTimeout(() => setLanding(false), 300);
   };
 
   // Ticker tape data
@@ -265,25 +270,26 @@ export function LandingPage() {
   return (
     <div
       className="relative h-screen w-screen overflow-hidden"
-      style={{ background: '#0a0a10', fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif' }}
+      style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", system-ui, sans-serif' }}
     >
-      <NoiseOverlay />
-      <AmbientOrbs />
-
       {/* === VIDEO BACKGROUND === */}
-      <div className="fixed inset-0 z-[-1] overflow-hidden">
+      <div className="absolute inset-0 z-0">
         <video
           autoPlay
           muted
           loop
           playsInline
-          className="absolute inset-0 w-full h-full object-cover"
+          preload="metadata"
+          className="w-full h-full object-cover"
           poster="/logo.svg"
         >
           <source src="https://res.cloudinary.com/dgz88jxiy/video/upload/v1774275215/5194152d6e6336320208e8d976e40aa9_ripmvb.mp4" type="video/mp4" />
         </video>
-        <div className="absolute inset-0 bg-black/70" />
+        <div className="absolute inset-0 bg-black/50" />
       </div>
+
+      <NoiseOverlay />
+      <AmbientOrbs />
 
       {/* === TICKER TAPE === */}
       <div
@@ -353,15 +359,13 @@ export function LandingPage() {
             transition={{ delay: 0.15, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
             style={{
               fontSize: 'clamp(40px, 7vw, 80px)',
-              fontWeight: 900,
-              letterSpacing: '-0.05em',
+              fontWeight: 700,
+              letterSpacing: '-0.03em',
               lineHeight: 1.05,
               color: '#f5f5f7',
               maxWidth: 800,
             }}
           >
-            VLTHR.
-            <br />
             <span style={{ color: '#0071e3' }}>Terminal-grade</span> precision.
           </motion.h1>
 
@@ -418,17 +422,6 @@ export function LandingPage() {
 
           </motion.div>
 
-          {/* Sparklines row */}
-          <motion.div
-            className="flex gap-3 mt-10 flex-wrap justify-center"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.5, duration: 0.6 }}
-          >
-            <SparkLine data={SPARK_BTC} color="#28c840" label="BTC/USD" />
-            <SparkLine data={SPARK_SPY} color="#28c840" label="SPY" />
-            <SparkLine data={SPARK_EUR} color="#28c840" label="EUR/USD" />
-          </motion.div>
         </div>
 
         {/* === METRICS STRIP === */}
@@ -473,25 +466,6 @@ export function LandingPage() {
           </div>
         </div>
 
-        {/* === FOOTER STRIP === */}
-        <motion.div
-          className="flex items-center justify-center gap-6 py-5 mt-auto"
-          style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 1.1 }}
-        >
-          {[
-            { icon: <Lock size={12} className="text-accent/70" />, label: 'Telegram 2FA' },
-            { icon: <Zap size={12} className="text-accent-green/70" />, label: 'Sub-10ms Feeds' },
-            { icon: <Globe size={12} className="text-accent/70" />, label: 'Global Markets' },
-          ].map((b) => (
-            <div key={b.label} className="flex items-center gap-2">
-              {b.icon}
-              <span style={{ fontSize: 11, color: 'rgba(245,245,247,0.55)', letterSpacing: '0.04em' }}>{b.label}</span>
-            </div>
-          ))}
-        </motion.div>
       </div>
     </div>
   );

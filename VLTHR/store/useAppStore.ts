@@ -382,6 +382,7 @@ export const useAppStore = create<AppState>()(
       skipHydration: true,
       partialize: (state) => ({
         isLocked: state.isLocked,
+        isOnLanding: state.isOnLanding,
         hasSentWelcome: state.hasSentWelcome,
         openWindows: state.openWindows,
         maxZIndex: state.maxZIndex,
