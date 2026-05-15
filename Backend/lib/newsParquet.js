@@ -13,7 +13,7 @@ const crypto = require('crypto');
  * while supporting efficient range queries across 12 months.
  */
 
-const _BASE = process.env.DATA_ROOT || path.join(__dirname, '../../data');
+const _BASE = process.env.DATA_ROOT || path.join(__dirname, '../data');
 const DATA_ROOT = path.join(_BASE, 'news');
 
 const CATEGORIES = ['finance', 'stocks', 'crypto', 'tech', 'economy'];

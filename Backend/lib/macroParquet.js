@@ -7,7 +7,7 @@ const fs = require('fs');
  * Handles storage and retrieval of economic indicators partitioned by country and indicator.
  */
 
-const DATA_ROOT = path.join(process.env.DATA_ROOT || path.join(__dirname, '../../data'), 'macro');
+const DATA_ROOT = path.join(process.env.DATA_ROOT || path.join(__dirname, '../data'), 'macro');
 
 const SCHEMA = new parquet.ParquetSchema({
   timestamp: { type: 'INT64' },

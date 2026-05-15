@@ -7,7 +7,7 @@ const fs = require('fs');
  * Handles storage and retrieval of market snapshots (prices, changes, caps) partitioned by category and hour.
  */
 
-const DATA_ROOT = path.join(process.env.DATA_ROOT || path.join(__dirname, '../../data'), 'snapshots');
+const DATA_ROOT = path.join(process.env.DATA_ROOT || path.join(__dirname, '../data'), 'snapshots');
 
 const SCHEMA = new parquet.ParquetSchema({
   symbol: { type: 'UTF8' },

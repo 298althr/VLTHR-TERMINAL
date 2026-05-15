@@ -7,7 +7,7 @@ const fs = require('fs');
  * Handles hierarchical partitioning for high-performance financial data.
  */
 
-const DATA_ROOT = process.env.DATA_ROOT || path.join(__dirname, '../../data');
+const DATA_ROOT = process.env.DATA_ROOT || path.join(__dirname, '../data');
 
 const SCHEMA = new parquet.ParquetSchema({
   timestamp: { type: 'INT64' },

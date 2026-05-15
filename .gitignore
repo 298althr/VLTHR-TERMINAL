@@ -4,7 +4,6 @@
 # Essential Directories
 !/VLTHR/
 !/Backend/
-!/data/
 
 # Essential Infrastructure & Docker
 !/Dockerfile

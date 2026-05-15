@@ -100,24 +100,29 @@ export function Island() {
         onClick={() => setIslandExpanded(!islandExpanded)}
         className="relative shadow-2xl overflow-hidden pointer-events-auto cursor-pointer"
       >
-        {/* Liquid Glass Background - Looping Video */}
-        <div className="absolute inset-0 z-0 overflow-hidden rounded-[inherit]">
-          <video
-            autoPlay
-            loop
-            muted
-            playsInline
-            key="island-bg-video"
-            className="absolute inset-0 w-full h-full object-cover scale-110"
-            style={{ 
-              filter: 'blur(30px) saturate(180%) brightness(0.4) contrast(1.1)',
-              backgroundColor: '#000'
+        {/* Tinted glass background with animated glowing border */}
+        <div className="absolute inset-0 z-0 overflow-hidden rounded-[inherit] bg-black/80 backdrop-blur-3xl">
+          {/* Pulsing glowing border line */}
+          <motion.div
+            initial={{ opacity: 0.3 }}
+            animate={{ 
+              opacity: [0.3, 0.6, 0.3],
+              boxShadow: [
+                'inset 0 0 0 1px rgba(255,255,255,0.1)',
+                'inset 0 0 0 1px rgba(255,255,255,0.4), 0 0 15px rgba(255,255,255,0.2)',
+                'inset 0 0 0 1px rgba(255,255,255,0.1)'
+              ]
             }}
-          >
-            <source src="https://res.cloudinary.com/dgz88jxiy/video/upload/v1774275215/5194152d6e6336320208e8d976e40aa9_ripmvb.mp4" type="video/mp4" />
-          </video>
-          {/* Tinted glass overlay */}
-          <div className="absolute inset-0 bg-black/60 backdrop-blur-3xl" />
+            transition={{ 
+              duration: 3, 
+              repeat: Infinity, 
+              ease: "easeInOut" 
+            }}
+            className="absolute inset-0 rounded-[inherit] pointer-events-none z-20"
+          />
+          
+          {/* Subtle noise texture */}
+          <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay bg-repeat" style={{ backgroundImage: 'url("https://grainy-gradients.vercel.app/noise.svg")' }} />
         </div>
 
         <div className="relative z-10 h-full w-full flex flex-col">

@@ -246,7 +246,7 @@ app.get('/api/quota', (req, res) => {
 app.get('/api/catalog', async (req, res) => {
   const fs = require('fs');
   const path = require('path');
-  const root = process.env.DATA_ROOT || path.join(__dirname, '../../data');
+  const root = process.env.DATA_ROOT || path.join(__dirname, './data');
 
   const scanDir = (dir) => {
     const full = path.join(root, dir);

@@ -15,9 +15,11 @@ export function usePriceAlerts() {
         data.triggered.forEach((alert: any) => {
           addNotification({
             id: Date.now().toString(),
+            appId: 'signals', // Added appId to fix TypeScript error
             title: 'Price Alert Triggered',
             message: `${alert.symbol} has crossed ${alert.threshold}`,
-            icon: '🔔'
+            icon: 'Zap',
+            timestamp: Date.now() // Added timestamp to fix TypeScript error
           });
           playSound('notification');
         });
