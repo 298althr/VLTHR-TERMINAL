@@ -104,7 +104,13 @@ app.get('/api/crypto/top', async (req, res) => {
 app.get('/api/crypto/history', async (req, res) => {
   const { symbol, interval } = req.query;
   if (!symbol) return res.status(400).json({ error: 'symbol required' });
-  const sym = symbol.includes('_') ? symbol : `${symbol.toUpperCase()}_USD`;
+  // Normalize: BTC_USD → BTC/USD, bitcoin → BTC/USD
+  let sym = symbol;
+  if (sym.includes('_')) {
+    sym = sym.replace(/_/g, '/');
+  } else if (!sym.includes('/')) {
+    sym = `${sym.toUpperCase()}/USD`;
+  }
   const data = await equities.getHistory(sym, interval || '1day', null, 'crypto');
   res.json(data || { symbol: sym, interval, points: [] });
 });
@@ -287,17 +293,38 @@ app.get('/api/catalog', async (req, res) => {
     return fs.readdirSync(full).filter(x => !x.startsWith('.'));
   };
 
-  const scanNested = (dir) => {
+  // Walk nested dirs and return leaf paths that contain .parquet files
+  const scanSymbols = (dir) => {
     const full = path.join(root, dir);
     if (!fs.existsSync(full)) return [];
-    return fs.readdirSync(full).filter(x => !x.includes('.'));
+    const results = new Set();
+
+    function walk(current, relParts) {
+      const entries = fs.readdirSync(current, { withFileTypes: true });
+      let hasParquet = false;
+      for (const entry of entries) {
+        if (entry.name.startsWith('.')) continue;
+        const entryPath = path.join(current, entry.name);
+        if (entry.isDirectory()) {
+          walk(entryPath, [...relParts, entry.name]);
+        } else if (entry.name.endsWith('.parquet')) {
+          hasParquet = true;
+        }
+      }
+      if (hasParquet && relParts.length > 0) {
+        results.add(relParts.join('/'));
+      }
+    }
+
+    walk(full, []);
+    return Array.from(results);
   };
 
   res.json({
-    crypto: scanNested('crypto'),
-    equities: scanNested('equities'),
-    forex: scanNested('forex'),
-    macro: scanNested('macro'),
+    crypto: scanSymbols('crypto'),
+    equities: scanSymbols('equities'),
+    forex: scanSymbols('forex'),
+    macro: scanSymbols('macro'),
     news: scanDir('news'),
   });
 });

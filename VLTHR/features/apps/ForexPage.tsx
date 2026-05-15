@@ -29,7 +29,7 @@ export function ForexPage() {
 
   useEffect(() => {
     catalogAdapter.getCatalog().then(c => {
-      const pairs = c.forex.filter(x => x.includes('_')).map(x => x.replace('_', '/'));
+      const pairs = c.forex.filter(x => x.includes('/'));
       setCatalog(pairs.length ? pairs : ['USD/EUR', 'USD/GBP', 'USD/JPY', 'USD/CHF']);
     });
   }, []);

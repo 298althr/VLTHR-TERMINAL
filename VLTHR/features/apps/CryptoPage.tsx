@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react';
 import { AppShell } from './AppShell';
 import { coingeckoAdapter } from '@/lib/adapters/coingecko';
 import { newsAdapter } from '@/lib/adapters/news';
-import { catalogAdapter } from '@/lib/adapters/catalog';
 import { PRICE_TICK, TIME_SERIES } from '@/lib/schemas';
 import { Activity, TrendingUp, TrendingDown, RefreshCcw, Zap } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -31,7 +30,7 @@ export function CryptoPage() {
   const [coins, setCoins]             = useState<PRICE_TICK[]>([]);
   const [coinsLoading, setCoinsLoading] = useState(true);
   const [livePrices, setLivePrices]   = useState<Record<string, string>>({});
-  const [catalog, setCatalog]         = useState<string[]>([]);
+  const [catalog] = useState<string[]>(['bitcoin', 'ethereum', 'solana', 'cardano', 'ripple', 'dogecoin']);
 
   const [selectedCoin, setSelectedCoin] = useState<PRICE_TICK | null>(null);
   const [interval, setTf]              = useState('1day');
@@ -42,30 +41,19 @@ export function CryptoPage() {
   const [news, setNews]               = useState<any[]>([]);
   const [newsLoading, setNewsLoading] = useState(false);
 
-  // ── Load catalog (only show assets in local data store) ────────────
-  useEffect(() => {
-    catalogAdapter.getCatalog().then(c => {
-      // Filter out symbols like 'BTC_USD' and keep only CG IDs like 'bitcoin'
-      const ids = c.crypto.filter(x => !x.includes('_') && x === x.toLowerCase());
-      setCatalog(ids.length ? ids : ['bitcoin', 'ethereum', 'solana', 'cardano', 'ripple', 'dogecoin']);
-    });
-  }, []);
-
   // ── Market cap list ───────────────────────────────────────────────
   useEffect(() => {
     const load = async () => {
       setCoinsLoading(true);
       const data = await coingeckoAdapter.getTopCoins();
-      // Filter to only assets present in local parquet
-      const available = catalog.length > 0 ? data.filter(c => c.id && catalog.includes(c.id)) : data;
-      setCoins(available);
-      if (available.length > 0 && !selectedCoin) setSelectedCoin(available[0]);
+      setCoins(data);
+      if (data.length > 0 && !selectedCoin) setSelectedCoin(data[0]);
       setCoinsLoading(false);
     };
     load();
     const t = window.setInterval(load, 60000);
     return () => window.clearInterval(t);
-  }, [catalog]);
+  }, []);
 
   // ── Chart history from parquet ────────────────────────────────────
   useEffect(() => {

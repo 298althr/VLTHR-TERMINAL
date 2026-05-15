@@ -54,7 +54,7 @@ module.exports = {
   },
 
   getHistory: async (base = 'USD', quote = 'EUR', interval = '1day') => {
-    const symbol = `${base}_${quote}`;
+    const symbol = `${base}/${quote}`;
     // Normalize timeframe name for parquet paths
     const tf = interval === '1day' ? '1d' : interval;
     
