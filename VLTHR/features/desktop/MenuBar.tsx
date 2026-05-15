@@ -99,7 +99,7 @@ export function MenuBar() {
       )}
 
       <div
-        className="fixed top-0 left-0 right-0 h-7 z-[100] macos-menubar flex items-center px-3 select-none"
+        className="fixed top-0 left-0 right-0 h-7 z-[300] macos-menubar flex items-center px-3 select-none"
         style={{ overflow: 'visible' }}
       >
         {/* Left: Oversized logo */}

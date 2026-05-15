@@ -90,7 +90,7 @@ export function Island() {
 
       <motion.div 
         animate={controls}
-        className="fixed top-10 left-0 right-0 z-[200] flex justify-center pointer-events-none"
+        className="fixed top-10 left-0 right-0 z-[400] flex justify-center pointer-events-none"
       >
       <motion.div
         layout

@@ -12,6 +12,7 @@ import { useAppStore } from '@/store/useAppStore';
 import { playSound } from '@/lib/audio';
 
 const DOCK_ITEMS = [
+  { id: 'launchpad', title: 'Launchpad', icon: '/icons/launcher.png', isImage: true },
   { id: 'signals',   title: 'Signal Engine', icon: Zap },
   { id: 'portfolio', title: 'Portfolio',     icon: Wallet },
   { id: 'concierge', title: 'Concierge',     icon: MessageSquare },
@@ -21,9 +22,9 @@ const DOCK_ITEMS = [
 
 function DockItem({ item, mouseX }: { item: typeof DOCK_ITEMS[0], mouseX: any }) {
   const ref = useRef<HTMLDivElement>(null);
-  const isActive = useAppStore((s) => s.dockCards[item.id]);
-  const toggleDockCard = useAppStore((s) => s.toggleDockCard);
-  const lock = useAppStore((s) => s.lock);
+  const { dockCards, toggleDockCard, lock, isLaunchpadOpen, setLaunchpadOpen } = useAppStore();
+  
+  const isActive = item.id === 'launchpad' ? isLaunchpadOpen : dockCards[item.id];
 
   const distance = useTransform(mouseX, (val: number) => {
     const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
@@ -37,10 +38,14 @@ function DockItem({ item, mouseX }: { item: typeof DOCK_ITEMS[0], mouseX: any })
     playSound('tap');
     if (item.id === 'logout') {
       lock();
+    } else if (item.id === 'launchpad') {
+      setLaunchpadOpen(!isLaunchpadOpen);
     } else {
       toggleDockCard(item.id);
     }
   };
+
+  const Icon = item.icon;
 
   return (
     <motion.div
@@ -53,7 +58,11 @@ function DockItem({ item, mouseX }: { item: typeof DOCK_ITEMS[0], mouseX: any })
         isActive ? 'bg-accent text-black shadow-[0_0_25px_rgba(255,255,0,0.4)]' : 'glass-liquid text-white/90 hover:bg-white/20'
       }`}
     >
-      <item.icon className="w-1/2 h-1/2" />
+      {item.isImage ? (
+        <img src={item.icon as string} alt={item.title} className="w-4/5 h-4/5 object-contain" />
+      ) : (
+        <Icon className="w-1/2 h-1/2" />
+      )}
       {isActive && (
         <motion.div 
           layoutId="dock-active-dot"

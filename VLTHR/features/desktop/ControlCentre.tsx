@@ -89,7 +89,7 @@ export function ControlCentre({ onClose }: ControlCentreProps) {
         animate={{ x: 0 }}
         exit={{ x: '100%' }}
         transition={{ type: 'spring', stiffness: 380, damping: 40 }}
-        className="fixed top-7 right-0 bottom-0 w-[360px] z-[160] flex flex-col gap-3 p-4 overflow-hidden"
+        className="fixed top-7 right-0 bottom-0 w-[360px] z-[350] flex flex-col gap-3 p-4 overflow-hidden"
         style={{
           background: 'rgba(8, 8, 18, 0.72)',
           backdropFilter: 'blur(70px) saturate(220%)',

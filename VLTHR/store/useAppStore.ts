@@ -94,6 +94,10 @@ interface AppState {
   isControlCentreOpen: boolean;
   setControlCentreOpen: (val: boolean) => void;
 
+  // Launchpad
+  isLaunchpadOpen: boolean;
+  setLaunchpadOpen: (val: boolean) => void;
+
   // Dock Cards (Mini-Toggles)
   dockCards: Record<string, boolean>;
   toggleDockCard: (id: string) => void;
@@ -168,6 +172,7 @@ export const useAppStore = create<AppState>()(
       isLoading: false,
       lastActivity: Date.now(),
       isControlCentreOpen: false,
+      isLaunchpadOpen: false,
 
       dockCards: {
         signals: false,
@@ -362,6 +367,8 @@ export const useAppStore = create<AppState>()(
       updateActivity: () => set({ lastActivity: Date.now() }),
 
       setControlCentreOpen: (val) => set({ isControlCentreOpen: val }),
+
+      setLaunchpadOpen: (val) => set({ isLaunchpadOpen: val }),
 
       toggleDockCard: (id) => set((state) => ({
         dockCards: {

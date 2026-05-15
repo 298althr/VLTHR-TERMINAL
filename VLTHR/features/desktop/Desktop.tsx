@@ -4,7 +4,7 @@ import { MenuBar } from './MenuBar';
 import { Dock } from './Dock';
 import { WindowManager } from './WindowManager';
 import { CommandPalette } from './CommandPalette';
-import { DesktopGrid } from './DesktopGrid';
+import { Launchpad } from './Launchpad';
 import { Island } from '@/features/dynamic-island/Island';
 import { DockCards } from './DockCards';
 import { LoadingOverlay } from '@/components/LoadingOverlay';
@@ -25,6 +25,7 @@ export function Desktop() {
       <LoadingOverlay />
       <SessionGuard />
       <AccessibilityTour />
+      <Launchpad />
       
       {/* Hot Corner: Right Edge Trigger for Control Centre */}
       <div 
@@ -34,7 +35,6 @@ export function Desktop() {
 
       {/* Desktop Content Area (Safety Zone) */}
       <main className="absolute inset-x-0 top-7 bottom-[110px] z-10">
-        <DesktopGrid />
         <WindowManager />
       </main>
 
