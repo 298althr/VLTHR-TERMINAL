@@ -17,6 +17,10 @@ const quotaManager = require('./lib/quotaManager');
 const ingestion = require('./services/ingestion');
 
 const app = express();
+
+// Trust proxy for Railway/Vercel rate limiting
+app.set('trust proxy', 1);
+
 ingestion.start();
 const PORT = process.env.PORT || 4000;
 
@@ -56,6 +60,7 @@ app.post('/api/auth/verify', (req, res) => {
 const limiter = rateLimitMiddleware({
   windowMs: 15 * 60 * 1000,
   max: 1000,
+  validate: { xForwardedForHeader: false }, // Disable the specific validation causing the crash
   message: { error: 'Too many requests, system throttling active.' }
 });
 app.use('/api/', limiter);

@@ -11,6 +11,8 @@ module.exports = {
     const cached = cache.get(cacheKey);
     if (cached.data && !cached.isStale) return cached.data;
 
+    const snapshotParquet = require('../lib/snapshotParquet');
+
     try {
       const res = await axios.get(`${BASE_URL}/coins/markets`, {
         params: { vs_currency: 'usd', order: 'market_cap_desc', per_page: limit, page: 1, sparkline: false }
@@ -22,6 +24,7 @@ module.exports = {
         price: coin.current_price,
         change: coin.price_change_24h,
         changePct: coin.price_change_percentage_24h,
+        market_cap: coin.market_cap,
         volume: coin.total_volume,
         high: coin.high_24h,
         low: coin.low_24h,
@@ -31,9 +34,21 @@ module.exports = {
         source: 'CoinGecko'
       }));
 
+      // Save to Parquet snapshots
+      await snapshotParquet.save('crypto', normalized);
+
       cache.set(cacheKey, normalized, config.CACHE_TTLS.CRYPTO_PRICE);
       return normalized;
     } catch (error) {
+      console.error('[CoinGecko] Market Fetch Failed:', error.message);
+      
+      // If live fetch fails, try reading from the latest Parquet snapshot
+      const disk = await snapshotParquet.readLatest('crypto');
+      if (disk && disk.length > 0) {
+        console.log(`[CoinGecko] Serving ${disk.length} coins from Parquet snapshot.`);
+        return disk;
+      }
+      
       return cached.data || [];
     }
   },
