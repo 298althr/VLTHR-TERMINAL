@@ -173,9 +173,11 @@ export const useAppStore = create<AppState>()(
           return;
         }
 
-        const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+        const rawUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+        const baseUrl = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl;
+
         try {
-          const res = await fetch(`${BACKEND_URL}/api/auth/request-code`, { method: 'POST' });
+          const res = await fetch(`${baseUrl}/api/auth/request-code`, { method: 'POST' });
           const data = await res.json();
           if (data.success) {
             set({ codeRequested: true, lastRequestTime: now });
@@ -203,10 +205,11 @@ export const useAppStore = create<AppState>()(
 
         set({ isVerifying: true });
         setLoading(true);
-        const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+        const rawUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+        const baseUrl = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl;
         
         try {
-          const res = await fetch(`${BACKEND_URL}/api/auth/verify`, {
+          const res = await fetch(`${baseUrl}/api/auth/verify`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ code: enteredPasscode })

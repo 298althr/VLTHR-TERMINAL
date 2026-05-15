@@ -32,6 +32,7 @@ $files = @(
     "features/lockscreen/PinPad.tsx",
     "features/lockscreen/LockScreen.tsx",
     "store/useAppStore.ts",
+    "lib/api.ts",
     "lib/adapters/catalog.ts",
     "features/dynamic-island/Island.tsx",
     "public/assets/dynamic-island-bg.png",

@@ -1,7 +1,12 @@
-const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+const getBackendUrl = () => {
+  const url = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+  return url.endsWith('/') ? url.slice(0, -1) : url;
+};
 
 export async function fetchFromBackend(path: string, params: Record<string, string> = {}) {
-  const url = new URL(`${BACKEND_URL}${path}`);
+  const baseUrl = getBackendUrl();
+  const cleanPath = path.startsWith('/') ? path : `/${path}`;
+  const url = new URL(`${baseUrl}${cleanPath}`);
   Object.entries(params).forEach(([key, val]) => url.searchParams.append(key, val));
   
   try {
