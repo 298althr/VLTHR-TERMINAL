@@ -84,6 +84,10 @@ interface AppState {
   isLoading: boolean;
   setLoading: (val: boolean) => void;
 
+  // Inactivity Logic
+  lastActivity: number;
+  updateActivity: () => void;
+
   // Dock Cards (Mini-Toggles)
   dockCards: Record<string, boolean>;
   toggleDockCard: (id: string) => void;
@@ -155,6 +159,7 @@ export const useAppStore = create<AppState>()(
       ],
       hasSentWelcome: false,
       isLoading: false,
+      lastActivity: Date.now(),
 
       dockCards: {
         signals: false,
@@ -343,6 +348,8 @@ export const useAppStore = create<AppState>()(
       setSentWelcome: (val) => set({ hasSentWelcome: val }),
       
       setLoading: (val) => set({ isLoading: val }),
+
+      updateActivity: () => set({ lastActivity: Date.now() }),
 
       toggleDockCard: (id) => set((state) => ({
         dockCards: {

@@ -24,13 +24,13 @@ function SingleDockCard({ card }: { card: typeof CARD_CONFIG[0] }) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           exit={{ opacity: 0, y: 50, scale: 0.9 }}
           transition={{ type: "spring", stiffness: 300, damping: 30 }}
-          className="w-[280px] h-[380px] rounded-[32px] glass-dark shadow-2xl flex flex-col overflow-hidden pointer-events-auto"
+          className="w-[320px] h-[460px] rounded-[32px] glass-dark shadow-2xl flex flex-col overflow-hidden pointer-events-auto"
         >
           {/* Card Header */}
-          <div className="flex items-center justify-between px-5 py-4 bg-white/5">
-            <div className="flex items-center gap-2">
-              <card.icon size={16} className="text-accent" />
-              <span className="text-white font-bold text-xs uppercase tracking-wider">{card.title}</span>
+          <div className="flex items-center justify-between px-6 py-5 bg-white/5 border-b border-white/5">
+            <div className="flex items-center gap-3">
+              <card.icon size={18} className="text-accent" />
+              <span className="text-white font-black text-xs uppercase tracking-[0.2em]">{card.title}</span>
             </div>
             <button 
               onClick={() => toggleDockCard(card.id)}
@@ -41,7 +41,7 @@ function SingleDockCard({ card }: { card: typeof CARD_CONFIG[0] }) {
           </div>
 
           {/* Card Content */}
-          <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar bg-black/20 relative">
+          <div className="flex-1 overflow-y-auto overflow-x-hidden custom-scrollbar bg-black/40 relative">
             <div className="p-0 h-full origin-top scale-[0.9] w-[111.1%] -ml-[5.55%]">
                <AppContentRouter appId={card.id} />
             </div>

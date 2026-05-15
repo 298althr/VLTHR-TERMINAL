@@ -37,7 +37,7 @@ export function DesktopGrid() {
   };
 
   return (
-    <div className="absolute inset-0 p-10 pt-20 grid grid-cols-[repeat(auto-fill,minmax(100px,1fr))] grid-rows-[repeat(auto-fill,minmax(100px,1fr))] gap-6 pointer-events-none">
+    <div className="absolute left-6 top-20 bottom-[110px] w-auto grid grid-flow-col grid-rows-[repeat(auto-fill,minmax(100px,1fr))] grid-cols-[repeat(auto-fill,minmax(100px,1fr))] gap-y-2 gap-x-0 pointer-events-none overflow-hidden">
       {DESKTOP_APPS.map((app) => (
         <motion.div
           key={app.id}

@@ -8,6 +8,8 @@ import { DesktopGrid } from './DesktopGrid';
 import { Island } from '@/features/dynamic-island/Island';
 import { DockCards } from './DockCards';
 import { LoadingOverlay } from '@/components/LoadingOverlay';
+import { SessionGuard } from '@/components/SessionGuard';
+import { AccessibilityTour } from '@/components/AccessibilityTour';
 
 import { useAppStore } from '@/store/useAppStore';
 
@@ -20,6 +22,8 @@ export function Desktop() {
       <Island />
       <DockCards />
       <LoadingOverlay />
+      <SessionGuard />
+      <AccessibilityTour />
       
       {/* Desktop Content Area (Safety Zone) */}
       <main className="absolute inset-x-0 top-7 bottom-[110px] z-10">
