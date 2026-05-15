@@ -20,7 +20,8 @@ venv/
 .env.*
 
 # Data lake (host-mounted, no need to COPY into image)
-data/
+/data/
+!Backend/data/
 
 # Git & IDE
 .git

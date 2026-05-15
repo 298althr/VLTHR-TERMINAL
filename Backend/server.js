@@ -21,6 +21,33 @@ const app = express();
 // Trust proxy for Railway/Vercel rate limiting
 app.set('trust proxy', 1);
 
+// ── Seed volume from image data on first boot ─────────────────────
+const fs = require('fs');
+const path = require('path');
+
+function copyDir(src, dest) {
+  if (!fs.existsSync(dest)) fs.mkdirSync(dest, { recursive: true });
+  for (const entry of fs.readdirSync(src, { withFileTypes: true })) {
+    const s = path.join(src, entry.name);
+    const d = path.join(dest, entry.name);
+    entry.isDirectory() ? copyDir(s, d) : fs.copyFileSync(s, d);
+  }
+}
+
+const dataDir = '/app/data';
+const seedDir = path.join(__dirname, 'data');
+
+if (fs.existsSync(seedDir)) {
+  const volumeEmpty = !fs.existsSync(dataDir) || fs.readdirSync(dataDir).filter(f => f !== '.initialized').length === 0;
+  if (volumeEmpty) {
+    console.log('[Init] Volume empty — seeding from image data...');
+    if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
+    copyDir(seedDir, dataDir);
+    fs.writeFileSync(path.join(dataDir, '.initialized'), new Date().toISOString());
+    console.log('[Init] Volume seeded successfully.');
+  }
+}
+
 ingestion.start();
 const PORT = process.env.PORT || 4000;
 
