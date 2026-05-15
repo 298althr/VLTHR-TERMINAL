@@ -17,9 +17,9 @@ async function runAudit() {
   console.log('[Audit] Launching browser...');
   console.log(`[Audit] Target: ${APP_URL}`);
 
-  // Use msedge which is already installed on Windows
+  // Use Chrome which is already installed on Windows
   const browser = await chromium.launch({
-    channel: 'msedge',
+    channel: 'chrome',
     headless: false,
     args: ['--window-size=1440,900']
   });
@@ -50,8 +50,8 @@ async function runAudit() {
 
   // ── Step 1: Landing Page ──
   console.log('[Audit] === Step 1: Landing Page ===');
-  await page.goto(APP_URL, { waitUntil: 'networkidle' });
-  await page.waitForTimeout(2000);
+  await page.goto(APP_URL, { waitUntil: 'domcontentloaded', timeout: 15000 });
+  await page.waitForTimeout(3000);
   await screenshot(page, '01-landing');
 
   const hasLaunchBtn = await page.locator('button:has-text("Launch")').isVisible().catch(() => false);
@@ -105,7 +105,7 @@ async function runAudit() {
   for (const p of pages) {
     console.log(`[Audit] === Checking ${p.name} ===`);
     try {
-      await page.goto(p.url, { waitUntil: 'networkidle', timeout: 15000 });
+      await page.goto(p.url, { waitUntil: 'domcontentloaded', timeout: 15000 });
       await page.waitForTimeout(3000);
       await screenshot(page, `04-${p.name}`);
       console.log(`[Audit] ${p.name}: OK`);

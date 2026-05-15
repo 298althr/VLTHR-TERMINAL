@@ -5,11 +5,13 @@ import { useAppStore } from '@/store/useAppStore';
 import { playSound } from '@/lib/audio';
 import { useEffect, useState } from 'react';
 import { usePWAInstall } from '@/hooks/usePWAInstall';
+import { checkBackendHealth } from '@/lib/api';
 
 export function LandingPage() {
   const setLanding = useAppStore((s) => s.setLanding);
   const [entered, setEntered] = useState(false);
   const [mousePos, setMousePos] = useState({ x: 50, y: 50 });
+  const [backendStatus, setBackendStatus] = useState<'checking' | 'online' | 'offline'>('checking');
 
   const { canInstall, promptInstall } = usePWAInstall();
 
@@ -22,6 +24,11 @@ export function LandingPage() {
     };
     window.addEventListener('mousemove', handleMouseMove);
     return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Backend connectivity check
+  useEffect(() => {
+    checkBackendHealth().then(ok => setBackendStatus(ok ? 'online' : 'offline'));
   }, []);
 
   const handleEnter = async () => {
@@ -108,6 +115,24 @@ export function LandingPage() {
           style={{ background: 'rgba(0,113,227,0.12)', border: '1px solid rgba(0,113,227,0.3)' }}
         >
           <span className="text-[11px] text-white/85 tracking-widest uppercase">Live Markets · 400+ Instruments</span>
+        </motion.div>
+
+        {/* Backend connectivity status (debug) */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="flex items-center gap-2 mb-4"
+        >
+          <span
+            className={`inline-block w-2 h-2 rounded-full ${
+              backendStatus === 'online' ? 'bg-emerald-400' :
+              backendStatus === 'offline' ? 'bg-red-400' : 'bg-yellow-400'
+            }`}
+          />
+          <span className="text-[10px] text-white/40 font-mono uppercase tracking-wider">
+            API: {backendStatus}
+          </span>
         </motion.div>
 
         <motion.h1

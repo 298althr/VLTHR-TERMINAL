@@ -1,0 +1,22 @@
+[warning] Could not load sound: tap TypeError: Failed to fetch
+    at aT (https://vlthr-terminal.vercel.app/_next/static/chunks/0-b4sto6cs5~h.js:11:122232)
+    at onUnlock (https://vlthr-terminal.vercel.app/_next/static/chunks/0-b4sto6cs5~h.js:11:129345)
+    at onDragEnd (https://vlthr-terminal.vercel.app/_next/static/chunks/0-b4sto6cs5~h.js:11:127752)
+    at https://vlthr-terminal.vercel.app/_next/static/chunks/0-b4sto6cs5~h.js:11:75859
+    at h (https://vlthr-terminal.vercel.app/_next/static/chunks/0-b4sto6cs5~h.js:11:10522)
+    at Set.forEach (<anonymous>)
+    at Object.process (https://vlthr-terminal.vercel.app/_next/static/chunks/0-b4sto6cs5~h.js:11:10698)
+    at m (https://vlthr-terminal.vercel.app/_next/static/chunks/0-b4sto6cs5~h.js:11:11136)
+[warning] Could not load sound: unlock TypeError: Failed to fetch
+    at aT (https://vlthr-terminal.vercel.app/_next/static/chunks/0-b4sto6cs5~h.js:11:122232)
+[warning] Could not load sound: unlock TypeError: Failed to fetch
+    at aT (https://vlthr-terminal.vercel.app/_next/static/chunks/0-b4sto6cs5~h.js:11:122232)
+[error] Request Code Error: TypeError: Failed to fetch
+    at requestCode (https://vlthr-terminal.vercel.app/_next/static/chunks/0-b4sto6cs5~h.js:3:12583)
+    at onClick (https://vlthr-terminal.vercel.app/_next/static/chunks/0-b4sto6cs5~h.js:11:124689)
+    at sJ (https://vlthr-terminal.vercel.app/_next/static/chunks/16l3hq9ouddxq.js:1:162751)
+    at https://vlthr-terminal.vercel.app/_next/static/chunks/16l3hq9ouddxq.js:1:168647
+    at tD (https://vlthr-terminal.vercel.app/_next/static/chunks/16l3hq9ouddxq.js:1:30681)
+    at s4 (https://vlthr-terminal.vercel.app/_next/static/chunks/16l3hq9ouddxq.js:1:163984)
+    at fz (https://vlthr-terminal.vercel.app/_next/static/chunks/16l3hq9ouddxq.js:1:200720)
+    at fT (https://vlthr-terminal.vercel.app/_next/static/chunks/16l3hq9ouddxq.js:1:200542)

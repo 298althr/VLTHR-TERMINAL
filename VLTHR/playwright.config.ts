@@ -19,8 +19,8 @@ export default defineConfig({
     trace: 'on',
     screenshot: 'on',
     video: 'on',
-    // Use Edge on Windows (already installed, no download needed)
-    channel: 'msedge',
+    // Use Chrome on Windows (already installed, no download needed)
+    channel: 'chrome',
     headless: false, // Must be headed for manual login
     viewport: { width: 1440, height: 900 },
     actionTimeout: 10000,
@@ -29,7 +29,7 @@ export default defineConfig({
   projects: [
     {
       name: 'audit',
-      use: { ...devices['Desktop Edge'] },
+      use: { ...devices['Desktop Chrome'] },
     },
   ],
 });
