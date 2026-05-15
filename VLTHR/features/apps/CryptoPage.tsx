@@ -138,13 +138,14 @@ export function CryptoPage() {
         {/* ── Live tickers strip ─────────────────────────────── */}
         <div className="flex gap-3 overflow-x-auto no-scrollbar pb-1">
           {coins.map((coin) => {
-            const wsPrice = livePrices[coin.id];
+            const coinId = coin.id || coin.symbol.toLowerCase();
+            const wsPrice = livePrices[coinId];
             const displayPrice = wsPrice
               ? parseFloat(wsPrice).toLocaleString(undefined, { minimumFractionDigits: 2 })
               : coin.price?.toLocaleString(undefined, { minimumFractionDigits: 2 }) || '—';
             const changePct = coin.changePct ?? 0;
             return (
-              <div key={coin.id} className={`glass-liquid px-4 py-3 rounded-2xl flex flex-col gap-1 min-w-[130px] border-b-2 ${changePct >= 0 ? 'border-accent-green/30' : 'border-accent-red/30'}`}>
+              <div key={coinId} className={`glass-liquid px-4 py-3 rounded-2xl flex flex-col gap-1 min-w-[130px] border-b-2 ${changePct >= 0 ? 'border-accent-green/30' : 'border-accent-red/30'}`}>
                 <div className="flex items-center gap-2">
                   <Zap size={9} className={`${wsPrice ? 'text-accent animate-pulse' : 'text-white/30'}`} />
                   <span className="text-white/40 text-[8px] uppercase font-bold tracking-widest">{coin.name}</span>
