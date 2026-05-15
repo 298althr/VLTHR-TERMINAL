@@ -51,7 +51,7 @@ export function SettingsPage() {
           </div>
           <div className="flex flex-col">
             <h2 className="text-white font-bold">Terminal Operator</h2>
-            <span className="text-white/40 text-xs">node@althr.terminal</span>
+            <span className="text-white/40 text-xs">vlthr@298saviour.dev</span>
           </div>
         </div>
 

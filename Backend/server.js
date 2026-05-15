@@ -253,7 +253,7 @@ app.get('/api/stats', (req, res) => {
   res.json(stats);
 });
 
-app.get('/api/quota', (req, res) => {
+app.get('/api/stats', (req, res) => {
   res.json(quotaManager.getStats());
 });
 
