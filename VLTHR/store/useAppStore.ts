@@ -14,6 +14,8 @@ export interface WindowState {
 interface AppState {
   // Lock state
   isLocked: boolean;
+  isOnLanding: boolean;
+  setLanding: (val: boolean) => void;
   enteredPasscode: string;
   pinError: boolean;
   isVerifying: boolean;
@@ -88,6 +90,10 @@ interface AppState {
   lastActivity: number;
   updateActivity: () => void;
 
+  // Control Centre
+  isControlCentreOpen: boolean;
+  setControlCentreOpen: (val: boolean) => void;
+
   // Dock Cards (Mini-Toggles)
   dockCards: Record<string, boolean>;
   toggleDockCard: (id: string) => void;
@@ -97,6 +103,7 @@ export const useAppStore = create<AppState>()(
   persist(
     (set, get) => ({
       isLocked: true,
+      isOnLanding: true,
       enteredPasscode: '',
       pinError: false,
       isVerifying: false,
@@ -160,6 +167,7 @@ export const useAppStore = create<AppState>()(
       hasSentWelcome: false,
       isLoading: false,
       lastActivity: Date.now(),
+      isControlCentreOpen: false,
 
       dockCards: {
         signals: false,
@@ -347,9 +355,13 @@ export const useAppStore = create<AppState>()(
       removeNotification: (id) => set((s) => ({ notifications: s.notifications.filter(n => n.id !== id) })),
       setSentWelcome: (val) => set({ hasSentWelcome: val }),
       
+      setLanding: (val) => set({ isOnLanding: val }),
+      
       setLoading: (val) => set({ isLoading: val }),
 
       updateActivity: () => set({ lastActivity: Date.now() }),
+
+      setControlCentreOpen: (val) => set({ isControlCentreOpen: val }),
 
       toggleDockCard: (id) => set((state) => ({
         dockCards: {

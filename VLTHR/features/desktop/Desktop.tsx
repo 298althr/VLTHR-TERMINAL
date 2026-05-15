@@ -15,6 +15,7 @@ import { useAppStore } from '@/store/useAppStore';
 
 export function Desktop() {
   const terminalBrightness = useAppStore((s) => s.terminalBrightness);
+  const setControlCentreOpen = useAppStore((s) => s.setControlCentreOpen);
 
   return (
     <div className="relative h-screen w-screen overflow-hidden bg-ventura-wallpaper">
@@ -25,6 +26,12 @@ export function Desktop() {
       <SessionGuard />
       <AccessibilityTour />
       
+      {/* Hot Corner: Right Edge Trigger for Control Centre */}
+      <div 
+        className="fixed top-7 right-0 bottom-0 w-2 z-[100] cursor-pointer hover:bg-white/5 transition-colors"
+        onMouseEnter={() => setControlCentreOpen(true)}
+      />
+
       {/* Desktop Content Area (Safety Zone) */}
       <main className="absolute inset-x-0 top-7 bottom-[110px] z-10">
         <DesktopGrid />

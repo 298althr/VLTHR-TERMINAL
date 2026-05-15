@@ -67,9 +67,8 @@ const dropdownVariants: Variants = {
 export function MenuBar() {
   const [time, setTime] = useState('');
   const [date, setDate] = useState('');
-  const [controlCentreOpen, setControlCentreOpen] = useState(false);
+  const { isControlCentreOpen, setControlCentreOpen, openWindow } = useAppStore();
   const [activeMenu, setActiveMenu] = useState<string | null>(null);
-  const { openWindow } = useAppStore();
 
   useEffect(() => {
     const tick = () => {
@@ -84,7 +83,7 @@ export function MenuBar() {
 
   const handleNavClick = (label: string) => {
     setActiveMenu((prev) => (prev === label ? null : label));
-    if (controlCentreOpen) setControlCentreOpen(false);
+    if (isControlCentreOpen) setControlCentreOpen(false);
   };
 
   const handleMenuItemClick = (item: MenuItem) => {
@@ -191,9 +190,9 @@ export function MenuBar() {
           <span className="text-white/35 font-medium hidden md:block" suppressHydrationWarning>{date}</span>
           <div className="w-px h-3 bg-white/15" />
           <button
-            onClick={() => { setControlCentreOpen((o) => !o); setActiveMenu(null); }}
+            onClick={() => { setControlCentreOpen(!isControlCentreOpen); setActiveMenu(null); }}
             className={`flex items-center gap-1.5 px-2 py-0.5 rounded-md transition-all font-semibold ${
-              controlCentreOpen ? 'bg-white/15 text-white' : 'text-white/75 hover:text-white hover:bg-white/10'
+              isControlCentreOpen ? 'bg-white/15 text-white' : 'text-white/75 hover:text-white hover:bg-white/10'
             }`}
           >
             <SlidersHorizontal size={11} />
@@ -203,7 +202,7 @@ export function MenuBar() {
       </div>
 
       <AnimatePresence>
-        {controlCentreOpen && (
+        {isControlCentreOpen && (
           <ControlCentre onClose={() => setControlCentreOpen(false)} />
         )}
       </AnimatePresence>
