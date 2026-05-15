@@ -100,27 +100,19 @@ export function Island() {
         onClick={() => setIslandExpanded(!islandExpanded)}
         className="relative shadow-2xl overflow-hidden pointer-events-auto cursor-pointer"
       >
-        {/* Liquid Glass Background Image - Looping Abstract */}
+        {/* Liquid Glass Background - Looping Video */}
         <div className="absolute inset-0 z-0 overflow-hidden">
-          <motion.div
-            animate={{
-              rotate: [0, 360],
-              scale: [1.2, 1.4, 1.2],
-            }}
-            transition={{
-              rotate: { duration: 40, repeat: Infinity, ease: "linear" },
-              scale: { duration: 20, repeat: Infinity, ease: "easeInOut" }
-            }}
-            className="absolute inset-[-50%]"
+          <video
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover opacity-60 brightness-50 contrast-125 scale-110"
+            style={{ filter: 'blur(30px) saturate(180%)' }}
           >
-            <Image 
-              src="https://images.unsplash.com/photo-1518715058720-e56f02e77fe5?w=600&auto=format&fit=crop&q=50" 
-              alt="background" 
-              fill 
-              className="object-cover opacity-60 brightness-50 contrast-125"
-            />
-          </motion.div>
-          <div className="absolute inset-0 backdrop-blur-3xl bg-black/40" />
+            <source src="https://res.cloudinary.com/dgz88jxiy/video/upload/v1774275215/5194152d6e6336320208e8d976e40aa9_ripmvb.mp4" type="video/mp4" />
+          </video>
+          <div className="absolute inset-0 bg-black/40" />
         </div>
 
         <div className="relative z-10 h-full w-full flex flex-col">
