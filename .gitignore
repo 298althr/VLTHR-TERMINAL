@@ -33,3 +33,4 @@ build/
 # Never commit parquet data or runtime snapshots
 Backend/data/
 Backend/*.tar.gz
+x-algorithm/
