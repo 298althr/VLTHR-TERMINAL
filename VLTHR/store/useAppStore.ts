@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { fetchFromBackend } from '@/lib/api';
 
 export interface WindowState {
   id: string;          // unique window id
@@ -184,26 +185,16 @@ export const useAppStore = create<AppState>()(
       requestCode: async () => {
         const { lastRequestTime } = get();
         const now = Date.now();
-        
+
         // 30s Throttle check
         if (now - lastRequestTime < 30000) {
           console.warn('Request Code throttled. Wait 30s.');
           return;
         }
 
-        let rawUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
-        if (rawUrl.includes('railway.app') && !rawUrl.startsWith('http')) {
-          rawUrl = `https://${rawUrl}`;
-        }
-        const baseUrl = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl;
-
         try {
-          const res = await fetch(`${baseUrl}/api/auth/request-code`, { 
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' }
-          });
-          const data = await res.json();
-          if (data.success) {
+          const data = await fetchFromBackend('/api/auth/request-code');
+          if (data?.success) {
             set({ codeRequested: true, lastRequestTime: now });
           }
         } catch (e) {
@@ -229,14 +220,11 @@ export const useAppStore = create<AppState>()(
 
         set({ isVerifying: true });
         setLoading(true);
-        let rawUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
-        if (rawUrl.includes('railway.app') && !rawUrl.startsWith('http')) {
-          rawUrl = `https://${rawUrl}`;
-        }
-        const baseUrl = rawUrl.endsWith('/') ? rawUrl.slice(0, -1) : rawUrl;
-        
+
         try {
-          const res = await fetch(`${baseUrl}/api/auth/verify`, {
+          const baseUrl = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+          const clean = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+          const res = await fetch(`${clean}/api/auth/verify`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ code: enteredPasscode })

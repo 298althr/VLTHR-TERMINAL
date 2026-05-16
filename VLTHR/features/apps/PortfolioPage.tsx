@@ -32,11 +32,12 @@ export function PortfolioPage() {
         setHoldings(sample);
         // Post sample to backend
         try {
-          const BACKEND_URL = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
-          await fetch(`${BACKEND_URL}/api/portfolio`, { 
-            method: 'POST', 
+          const base = process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:4000';
+          const clean = base.endsWith('/') ? base.slice(0, -1) : base;
+          await fetch(`${clean}/api/portfolio`, {
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(sample) 
+            body: JSON.stringify(sample)
           });
         } catch (e) {
           console.error('Failed to sync portfolio', e);
