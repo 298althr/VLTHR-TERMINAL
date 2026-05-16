@@ -153,10 +153,15 @@ export function NewsPage() {
                   </motion.a>
                 ))
               ) : (
-                <div className="flex flex-col items-center justify-center py-10 gap-2">
+                <div className="flex flex-col items-center justify-center py-10 gap-3">
                   <span className="text-white/20 text-xs italic">
-                    {isSearchMode ? `No results for "${searchQuery}"` : `No parquet data for "${category}" — run harvestNews.js`}
+                    {isSearchMode ? `No results for "${searchQuery}"` : `News data syncing from volume...`}
                   </span>
+                  {!isSearchMode && (
+                    <span className="text-white/10 text-[10px]">
+                      First load may take a moment while the backend seeds initial articles.
+                    </span>
+                  )}
                 </div>
               )}
             </AnimatePresence>
@@ -166,7 +171,7 @@ export function NewsPage() {
         {/* Rate Limit Info */}
         <div className="glass-liquid p-5 rounded-[28px] border-dashed border-white/10 mt-4">
           <p className="text-white/20 text-[8px] leading-relaxed">
-            TERMINAL ADVISORY: News feed is served from local parquet data lake (data/news/). Data is pre-harvested via harvestNews.js and enriched with QAQC scoring and lexicon sentiment analysis. Search queries run across all monthly parquet partitions for the selected category.
+            TERMINAL ADVISORY: News feed is served from the Railway volume data lake (data/news/). The backend auto-seeds initial articles if the volume is empty, then enriches live feeds with QAQC scoring and lexicon sentiment analysis. Scheduler refreshes daily respecting API rate limits.
           </p>
         </div>
       </div>
