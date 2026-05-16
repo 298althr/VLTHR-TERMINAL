@@ -4,6 +4,12 @@ const rateLimit = require('../lib/rateLimit');
 const config = require('../lib/config');
 
 const BASE_URL = 'https://api.coingecko.com/api/v3';
+const PRO_URL = 'https://pro-api.coingecko.com/api/v3';
+const COINGECKO_KEY = process.env.COINGECKO_API_KEY;
+
+// Use pro endpoint if key is set, otherwise free endpoint
+const API_BASE = COINGECKO_KEY ? PRO_URL : BASE_URL;
+const apiHeaders = COINGECKO_KEY ? { 'x-cg-pro-api-key': COINGECKO_KEY } : {};
 
 module.exports = {
   getTopCoins: async (limit = 20) => {
@@ -14,8 +20,9 @@ module.exports = {
     const snapshotParquet = require('../lib/snapshotParquet');
 
     try {
-      const res = await axios.get(`${BASE_URL}/coins/markets`, {
-        params: { vs_currency: 'usd', order: 'market_cap_desc', per_page: limit, page: 1, sparkline: false }
+      const res = await axios.get(`${API_BASE}/coins/markets`, {
+        params: { vs_currency: 'usd', order: 'market_cap_desc', per_page: limit, page: 1, sparkline: false },
+        headers: apiHeaders
       });
 
       const normalized = res.data.map(coin => ({
@@ -68,8 +75,9 @@ module.exports = {
     if (localData && localData.length > 0) return { id, points: localData };
 
     try {
-      const res = await axios.get(`${BASE_URL}/coins/${id}/market_chart`, {
-        params: { vs_currency: 'usd', days: days, interval: 'daily' }
+      const res = await axios.get(`${API_BASE}/coins/${id}/market_chart`, {
+        params: { vs_currency: 'usd', days: days, interval: 'daily' },
+        headers: apiHeaders
       });
       
       const points = res.data.prices.map(([ts, price]) => ({

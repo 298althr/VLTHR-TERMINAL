@@ -23,7 +23,7 @@ const newsParquet = require('./lib/newsParquet');
  *       node Backend/harvestNews.js --from 2024-11-01 --to 2025-05-01
  */
 
-const MARKETAUX_KEY = process.env.NEXT_PUBLIC_MARKETAUX_KEY;
+const MARKETAUX_KEY = process.env.MARKETAUX_KEY || process.env.NEXT_PUBLIC_MARKETAUX_KEY;
 const BASE_URL      = 'https://api.marketaux.com/v1/news/all';
 const PAGE_SIZE     = 50;    // max articles per request
 const MAX_PER_DAY   = 50;    // daily request ceiling (conservative)
@@ -137,7 +137,7 @@ async function fetchPage(category, window, page) {
 // ─── Main ─────────────────────────────────────────────────────────────────────
 async function harvest(options = {}) {
   if (!MARKETAUX_KEY) {
-    console.error('❌  NEXT_PUBLIC_MARKETAUX_KEY not set in .env');
+    console.error('❌  MARKETAUX_KEY not set in .env');
     process.exit(1);
   }
 

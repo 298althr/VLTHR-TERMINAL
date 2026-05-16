@@ -29,3 +29,7 @@ build/
 .idea/
 .vscode/
 *.log
+
+# Never commit parquet data or runtime snapshots
+Backend/data/
+Backend/*.tar.gz
